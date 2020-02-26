@@ -15,15 +15,11 @@ class Player:
         self.fall_g = 4000.0
         self.g = self.fall_g
 
-    def update(self, delta_time):
-        keys = pygame.key.get_pressed()
-
-        # hastighed
+    def update(self, delta_time, key_input):
         pre_y = self.position.y
         self.speed.y += self.g/2 * delta_time
-        self.position += self.speed * delta_time
+        self.position += self.speed * delta_time    # spilleren skal kun bevæge sig med den gennemsnitlige fart
         self.speed.y += self.g/2 * delta_time
-        self.position.x = self.position.x % 1280
 
         if self.speed.y > 0:
             self.g = self.fall_g
@@ -38,6 +34,7 @@ class Player:
                 self.grounded = True
             else:
                 self.grounded = False
+
         elif self.speed.y < 0:
             self.grounded = False
 
@@ -45,14 +42,15 @@ class Player:
             head_collider = pygame.Rect(round(self.position.x), round(pre_y), round(self.size.y), 0)
             head_collider.height = math.ceil(self.position.y - pre_y)
             collision = head_collider.collidelist(self.colliders)
-            if not collision == -1:
+            if not collision == -1:     # Collision er -1 hvis der ikke er nogen kollisioner
                 self.position.y = self.colliders[collision].bottom
                 self.speed.y = 0
 
-        if keys[pygame.K_SPACE] and self.grounded:
+        # jump
+        if key_input[pygame.K_SPACE] and self.grounded:
             self.speed.y = -1200
             self.g = self.jump_g
-        elif not keys[pygame.K_SPACE]:
+        elif not key_input[pygame.K_SPACE]:
             self.g = self.fall_g
 
     def draw(self, screen):
