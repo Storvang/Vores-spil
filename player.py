@@ -21,6 +21,8 @@ class Player:
         self.position += self.speed * delta_time    # spilleren skal kun bevæge sig med den gennemsnitlige fart
         self.speed.y += self.g/2 * delta_time
 
+        self.position.x = self.position.x % 1280    # midlertidig
+
         if self.speed.y > 0:
             self.g = self.fall_g
 
