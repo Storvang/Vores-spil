@@ -53,3 +53,4 @@ while not quit_game:
         time.sleep(min_delta_time - delta_time)
         delta_time += (pygame.time.get_ticks() / 1000) - pre_time
         pre_time = pygame.time.get_ticks() / 1000
+#oh yeah yeah
