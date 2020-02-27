@@ -50,7 +50,7 @@ class Player:
 
         # jump
         if key_input[pygame.K_SPACE] and self.grounded:
-            self.speed.y = -1200
+            self.speed.y = -800
             self.g = self.jump_g
         elif not key_input[pygame.K_SPACE]:
             self.g = self.fall_g
