@@ -4,6 +4,7 @@ import time
 import player
 import misc_classes
 
+pygame.display.set_caption('Vores spil der bare sparker røv')
 
 # init main loop
 pygame.init()
