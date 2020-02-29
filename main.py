@@ -1,18 +1,22 @@
 import pygame
 import time
+import os
 
 import player
 import misc_classes
 
-pygame.display.set_caption('Vores spil der bare sparker røv')
 
 # init main loop
 pygame.init()
 screen = pygame.display.set_mode((1280, 720))
+pygame.display.set_icon(pygame.image.load(os.path.join('Assets', 'icon.png')))
+pygame.display.set_caption('Vores spil der bare sparker røv')
+
 scroll = 0
+cam_speed = 400
 
 colliders = []
-Mark = player.Player((300, 500), (200, 0), (25, 25), (66, 135, 245), colliders)
+Mark = player.Player((300, 500), (400, 0), (25, 25), (66, 135, 245), colliders)
 Ground = misc_classes.Platform((0, 600), (1280, 120), colliders)
 
 min_delta_time = 0.003
@@ -40,11 +44,12 @@ while not quit_game:
     if not paused:
         Ground.update(delta_time)
         Mark.update(delta_time, key_input)
+        scroll += cam_speed * delta_time
 
     # draw
     screen.fill((255, 255, 255))
-    Ground.draw(screen)
-    Mark.draw(screen)
+    Ground.draw(screen, scroll)
+    Mark.draw(screen, scroll)
     pygame.display.flip()
 
     # delta time

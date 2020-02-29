@@ -21,7 +21,7 @@ class Player:
         self.position += self.speed * delta_time    # spilleren skal kun bevæge sig med den gennemsnitlige fart
         self.speed.y += self.g/2 * delta_time
 
-        self.position.x = self.position.x % 1280    # midlertidig
+        # self.position.x = self.position.x % 1280    # midlertidig
 
         if self.speed.y > 0:
             self.g = self.fall_g
@@ -55,6 +55,6 @@ class Player:
         elif not key_input[pygame.K_SPACE]:
             self.g = self.fall_g
 
-    def draw(self, screen):
-        player_rect = (round(self.position.x), round(self.position.y), round(self.size.x), round(self.size.y))
+    def draw(self, screen, scroll):
+        player_rect = (round(self.position.x - scroll), round(self.position.y), round(self.size.x), round(self.size.y))
         pygame.draw.rect(screen, self.color, player_rect)
