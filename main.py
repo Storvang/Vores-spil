@@ -1,6 +1,7 @@
 import pygame
 import time
 import os
+import ctypes
 
 import player
 import misc_classes
@@ -8,7 +9,22 @@ import misc_classes
 
 # init main loop
 pygame.init()
-screen = pygame.display.set_mode((1280, 720))
+
+fullscreen = False
+window_scale = 0.5  # bliver kun brugt hvis fullscreen er deaktiveret
+monitor_dim = (pygame.display.Info().current_w, pygame.display.Info().current_h)
+ctypes.windll.user32.SetProcessDPIAware()
+
+if fullscreen is True:
+    screen_scale = monitor_dim[0] / 1920
+    screen = pygame.display.set_mode(monitor_dim, pygame.FULLSCREEN)
+else:
+    screen_scale = window_scale
+    screen = pygame.display.set_mode((round(1920 * screen_scale), round(1080 * screen_scale)))
+
+
+
+
 pygame.display.set_icon(pygame.image.load(os.path.join('Assets', 'icon.png')))
 pygame.display.set_caption('Vores spil der bare sparker røv')
 
@@ -16,8 +32,8 @@ scroll = 0
 cam_speed = 400
 
 colliders = []
-Mark = player.Player((300, 500), (400, 0), (25, 25), (66, 135, 245), colliders)
-Ground = misc_classes.Platform((0, 600), (1280, 120), colliders)
+Mark = player.Player((300, 500), (400, 0), (40, 40), (66, 135, 245), colliders)
+Ground = misc_classes.Platform((0, 880), (1920, 200), colliders)
 
 min_delta_time = 0.003
 delta_time = 0
@@ -48,8 +64,8 @@ while not quit_game:
 
     # draw
     screen.fill((255, 255, 255))
-    Ground.draw(screen, scroll)
-    Mark.draw(screen, scroll)
+    Ground.draw(screen, scroll, screen_scale)
+    Mark.draw(screen, scroll, screen_scale)
     pygame.display.flip()
 
     # delta time

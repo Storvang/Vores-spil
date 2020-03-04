@@ -11,9 +11,10 @@ class Player:
         self.colliders = colliders
 
         self.grounded = False
-        self.jump_g = 1500.0
-        self.fall_g = 4000.0
+        self.jump_g = 2200.0
+        self.fall_g = 6000.0
         self.g = self.fall_g
+        self.jump_power = 1200
 
     def update(self, delta_time, key_input):
         pre_y = self.position.y
@@ -50,11 +51,16 @@ class Player:
 
         # jump
         if key_input[pygame.K_SPACE] and self.grounded:
-            self.speed.y = -800
+            self.speed.y = -self.jump_power
             self.g = self.jump_g
         elif not key_input[pygame.K_SPACE]:
             self.g = self.fall_g
 
-    def draw(self, screen, scroll):
-        player_rect = (round(self.position.x - scroll), round(self.position.y), round(self.size.x), round(self.size.y))
-        pygame.draw.rect(screen, self.color, player_rect)
+    def draw(self, screen, scroll, scale):
+        render_rect = pygame.Rect(0, 0, 0, 0)
+        render_rect.x = round((self.position.x - scroll) * scale)
+        render_rect.y = round(self.position.y * scale)
+        render_rect.width = round(self.size.x * scale)
+        render_rect.height = round(self.size.y * scale)
+
+        pygame.draw.rect(screen, self.color, render_rect)
