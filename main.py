@@ -2,18 +2,14 @@ import pygame
 import time
 import os
 import ctypes
-import random
+import platform
 
+# Vores egne
 import player
 import misc_classes
 
 
-# init main loop
-pygame.init()
-
-
-# screen
-def make_screen(fullscreen, window_scale):
+def make_screen(fullscreen, window_scale, monitor_dim):
     if fullscreen:
         screen_scale = monitor_dim[0] / 1920
         screen = pygame.display.set_mode(monitor_dim, pygame.FULLSCREEN)
@@ -23,11 +19,16 @@ def make_screen(fullscreen, window_scale):
     return screen, screen_scale
 
 
+# init main loop
+pygame.init()
+
+if platform.system() == "Windows":
+    ctypes.windll.user32.SetProcessDPIAware()   # ignorer Windows skærm-skalering
+
 fullscreen = False
 window_scale = 0.7  # bliver kun brugt hvis fullscreen er deaktiveret
 monitor_dim = (pygame.display.Info().current_w, pygame.display.Info().current_h)
-ctypes.windll.user32.SetProcessDPIAware()
-screen, screen_scale = make_screen(fullscreen, window_scale)
+screen, screen_scale = make_screen(fullscreen, window_scale, monitor_dim)
 
 pygame.display.set_icon(pygame.image.load(os.path.join('Assets', 'icon.png')))
 pygame.display.set_caption('Vores spil der bare sparker røv')
@@ -56,10 +57,12 @@ while not quit_game:
 
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
+                # pause
                 paused = not paused
             if event.key == pygame.K_TAB:
+                # toggle fullscreen
                 fullscreen = not fullscreen
-                screen, screen_scale = make_screen(fullscreen, window_scale)
+                _, screen_scale = make_screen(fullscreen, window_scale, monitor_dim)
 
     key_input = pygame.key.get_pressed()
 
