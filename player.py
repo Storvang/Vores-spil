@@ -11,10 +11,10 @@ class Player:
         self.colliders = colliders
 
         self.grounded = False
-        self.jump_g = 2200.0
-        self.fall_g = 6000.0
+        self.jump_g = 3300.0
+        self.fall_g = 9000.0
         self.g = self.fall_g
-        self.jump_power = 1200
+        self.jump_power = 1800
 
     def update(self, delta_time, key_input):
         pre_y = self.position.y
