@@ -39,7 +39,8 @@ cam_speed = 400
 colliders = []
 Mark = player.Player((300, 500), (400, 0), (40, 40), (66, 135, 245), colliders)
 Ground = misc_classes.Platform((0, 880), (1920, 200), colliders)
-Ground2 = misc_classes.Platform((1920,700), (3000, 50), colliders)
+Ground2 = misc_classes.Platform((1920,700), (300, 50), colliders)
+Ground3 = misc_classes.Platform((2260,500), (500, 50), colliders)
 
 min_delta_time = 0.003
 delta_time = 0
@@ -78,6 +79,7 @@ while not quit_game:
     screen.fill((255, 255, 255))
     Ground.draw(screen, scroll, screen_scale)
     Ground2.draw(screen, scroll, screen_scale)
+    Ground3.draw(screen, scroll, screen_scale)
     Mark.draw(screen, scroll, screen_scale)
     pygame.display.flip()
 
