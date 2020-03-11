@@ -34,13 +34,12 @@ pygame.display.set_icon(pygame.image.load(os.path.join('Assets', 'icon.png')))
 pygame.display.set_caption('Vores spil der bare sparker røv')
 
 scroll = 0
-cam_speed = 400
+cam_speed = 1000
 
 colliders = []
-Mark = player.Player((300, 500), (400, 0), (40, 40), (66, 135, 245), colliders)
-Ground = misc_classes.Platform((0, 880), (1920, 200), colliders)
-Ground2 = misc_classes.Platform((1920,700), (300, 50), colliders)
-Ground3 = misc_classes.Platform((2260,500), (500, 50), colliders)
+Mark = player.Player(position=(300, 500), speed=(cam_speed, 0), size=(40, 40), color=(66, 135, 245), colliders=colliders)
+Ground = misc_classes.Platform(position=(0, 880), size=(1920, 200), colliders=colliders)
+Ground2 = misc_classes.Platform(position=(1920, 700), size=(3000, 50), colliders=colliders)
 
 min_delta_time = 0.003
 delta_time = 0
@@ -53,16 +52,24 @@ paused = False
 while not quit_game:
 
     # input
+    space_pressed = False
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             quit_game = True
 
         elif event.type == pygame.KEYDOWN:
+
+            # jump
+            if event.key == pygame.K_SPACE:
+                space_pressed = True
+
+            # pause
             if event.key == pygame.K_ESCAPE:
-                # pause
                 paused = not paused
+
+            # toggle fullscreen
             if event.key == pygame.K_TAB:
-                # toggle fullscreen
                 fullscreen = not fullscreen
                 _, screen_scale = make_screen(fullscreen, window_scale, monitor_dim)
 
@@ -72,14 +79,13 @@ while not quit_game:
     if not paused:
         Ground.update(delta_time)
         Ground2.update(delta_time)
-        Mark.update(delta_time, key_input)
+        Mark.update(delta_time, space_pressed)
         scroll += cam_speed * delta_time
 
     # draw
     screen.fill((255, 255, 255))
     Ground.draw(screen, scroll, screen_scale)
     Ground2.draw(screen, scroll, screen_scale)
-    Ground3.draw(screen, scroll, screen_scale)
     Mark.draw(screen, scroll, screen_scale)
     pygame.display.flip()
 
