@@ -14,11 +14,10 @@ class Platform:
         pass
 
     def draw(self, screen, scroll, scale):
-        render_rect = pygame.Rect(0, 0, 0, 0)
-        render_rect.x = round((self.position.x - scroll) * scale)
-        render_rect.y = round(self.position.y * scale)
-        render_rect.width = round(self.size.x * scale)
-        render_rect.height = round(self.size.y * scale)
+        render_rect = pygame.Rect(round((self.position.x - scroll) * scale),
+                                  round(self.position.y * scale),
+                                  round(self.size.x * scale),
+                                  round(self.size.y * scale))
 
         pygame.draw.rect(screen, (52, 64, 235), render_rect)
 
