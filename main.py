@@ -1,12 +1,7 @@
-import pygame
-import time
-import os
-import ctypes
-import platform
+import pygame, time, os, ctypes, platform
 
 # Vores egne
-import player
-import misc_classes
+import playerClass, platformClass
 
 
 def make_screen(fullscreen, window_scale, monitor_dim):
@@ -38,14 +33,14 @@ scroll = 0
 cam_speed = 700
 
 colliders = []
-Ground = misc_classes.Platform(position=(0, 880), size=(1920, 200), colliders=colliders)
-Ground2 = misc_classes.Platform(position=(1920, 700), size=(3000, 50), colliders=colliders)
+Ground = platformClass.Platform(position=(0, 880), length=38, colliders=colliders)
+Ground2 = platformClass.Platform(position=(1920, 700), length=60, colliders=colliders)
 
-Mark = player.Player(position=(300, 500),
-                     speed=(cam_speed, 0),
-                     size=(40, 40),
-                     color=(66, 135, 245),
-                     colliders=colliders)
+Mark = playerClass.Player(position=(300, 500),
+                          speed=(cam_speed, 0),
+                          size=(40, 40),
+                          color=(66, 135, 245),
+                          colliders=colliders)
 
 min_delta_time = 0.003
 max_delta_time = 0.066
