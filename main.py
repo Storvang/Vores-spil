@@ -1,7 +1,7 @@
 import pygame, time, os, ctypes, platform
 
 # Vores egne
-import playerClass, platformClass
+import playerClass, platformClass, miscClasses
 
 
 def make_screen(fullscreen, window_scale, monitor_dim):
@@ -39,7 +39,7 @@ Ground2 = platformClass.Platform(position=(1920, 700), length=60, colliders=coll
 Mark = playerClass.Player(position=(300, 500),
                           speed=(cam_speed, 0),
                           size=(40, 40),
-                          color=(66, 135, 245),
+                          color=(255, 0, 242),
                           colliders=colliders)
 
 min_delta_time = 0.003
@@ -77,17 +77,13 @@ while not quit_game:
                 fullscreen = not fullscreen
                 _, screen_scale = make_screen(fullscreen, window_scale, monitor_dim)
 
-    key_input = pygame.key.get_pressed()
-
     # update
     if not paused:
-        Ground.update(delta_time)
-        Ground2.update(delta_time)
         Mark.update(delta_time, cam_speed, space_pressed)
         scroll += cam_speed * delta_time
 
     # draw
-    screen.fill((255, 255, 255))
+    screen.fill((74, 228, 255))
     Ground.draw(screen, scroll, screen_scale)
     Ground2.draw(screen, scroll, screen_scale)
     Mark.draw(screen, scroll, screen_scale)

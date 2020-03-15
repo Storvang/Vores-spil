@@ -1,13 +1,14 @@
 import pygame, os
 
-platform_left_img = pygame.image.load(os.path.join("Assets", "Platforms", "Platform (Left end).png"))
+platform_left_img = pygame.image.load(os.path.join("Assets", "Platforms", "Platform(Left end).png"))
 platform_left_img = pygame.transform.scale(platform_left_img, (50, 50))
 
 platform_middle_img = pygame.image.load(os.path.join("Assets", "Platforms", "Platform(Middle).png"))
 platform_middle_img = pygame.transform.scale(platform_middle_img, (50, 50))
 
-platform_right_img = pygame.image.load(os.path.join("Assets", "Platforms", "Platform(right end).png"))
+platform_right_img = pygame.image.load(os.path.join("Assets", "Platforms", "Platform(Right end).png"))
 platform_right_img = pygame.transform.scale(platform_right_img, (50, 50))
+
 
 class Platform:
     def __init__(self, position, length, colliders):
@@ -25,9 +26,6 @@ class Platform:
         for i in range(50, self.rect.width - 50, 50):
             self.platform_img.blit(platform_middle_img, (i, 0))
         self.platform_img.blit(platform_right_img, (self.size.x - 50, 0))
-
-    def update(self, delta_time):
-        pass
 
     def draw(self, screen, scroll, scale):
         render_rect = pygame.Rect(round((self.position.x - scroll) * scale),
