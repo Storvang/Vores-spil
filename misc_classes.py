@@ -1,5 +1,7 @@
 import pygame
+import os, pygame
 
+platformmiddle = pygame.image.load(os.path.join("Assets","Platforms","Platform(Middle).png"))
 
 class Platform:
     def __init__(self, position, size, colliders):
@@ -12,6 +14,9 @@ class Platform:
 
     def update(self, delta_time):
         pass
+
+    #def draw():
+        #win.blit(platformmiddle)
 
     def draw(self, screen, scroll, scale):
         render_rect = pygame.Rect(round((self.position.x - scroll) * scale),
