@@ -30,8 +30,8 @@ window_scale = 0.7  # bliver kun brugt hvis fullscreen er deaktiveret
 monitor_dim = (pygame.display.Info().current_w, pygame.display.Info().current_h)
 screen, screen_scale = make_screen(fullscreen, window_scale, monitor_dim)
 
-pygame.display.set_icon(pygame.image.load(os.path.join('Assets', 'CoolDaniel.png')))
-pygame.display.set_caption('Vores spil der bare sparker røv, ps daniel er en monke')
+pygame.display.set_icon(pygame.image.load(os.path.join('Assets', 'icon.png')))
+pygame.display.set_caption('Vores spil der bare sparker røv')
 
 scroll = 0
 cam_speed = 1000
