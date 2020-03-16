@@ -75,7 +75,7 @@ while not quit_game:
             # toggle fullscreen
             if event.key == pygame.K_TAB:
                 fullscreen = not fullscreen
-                _, screen_scale = make_screen(fullscreen, window_scale, monitor_dim)
+                screen, screen_scale = make_screen(fullscreen, window_scale, monitor_dim)
 
     # update
     if not paused:
@@ -96,10 +96,12 @@ while not quit_game:
     FPS_low = False
     delta_time = (pygame.time.get_ticks() / 1000) - pre_time
     pre_time = pygame.time.get_ticks() / 1000
+
     if delta_time < min_delta_time:
         time.sleep(min_delta_time - delta_time)
         delta_time += (pygame.time.get_ticks() / 1000) - pre_time
         pre_time = pygame.time.get_ticks() / 1000
+
     elif delta_time > max_delta_time:
         delta_time = max_delta_time
         FPS_low = True

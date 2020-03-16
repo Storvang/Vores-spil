@@ -18,15 +18,15 @@ class Player:
         self.jump_power = 2
         self.double_jump_power = 2.1
 
-    def update(self, delta_time, speed, space_pressed):
+    def update(self, delta_time, speed, jump_pressed):
 
         # jump
-        if space_pressed and self.grounded:
+        if jump_pressed and self.grounded:
             self.speed.y = -self.jump_power
             self.g = self.jump_g
             self.air_jumps = self.max_air_jumps
 
-        elif space_pressed and self.air_jumps > 0:
+        elif jump_pressed and self.air_jumps > 0:
             self.speed.y = -self.double_jump_power
             self.g = self.jump_g
             self.air_jumps -= 1
