@@ -26,5 +26,6 @@ class Platform:
 
         pygame.draw.rect(screen, (52, 64, 235), render_rect)
 
+
     def __del__(self):
         self.colliders.remove(self.rect)

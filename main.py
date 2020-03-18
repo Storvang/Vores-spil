@@ -33,6 +33,7 @@ screen, screen_scale = make_screen(fullscreen, window_scale, monitor_dim)
 pygame.display.set_icon(pygame.image.load(os.path.join('Assets', 'icon.png')))
 pygame.display.set_caption('Vores spil der bare sparker røv')
 
+
 scroll = 0
 cam_speed = 1000
 
