@@ -1,12 +1,7 @@
-import pygame
-import time
-import os
-import ctypes
-import platform
+import pygame, time, os, ctypes, platform
 
 # Vores egne
-import player
-import misc_classes
+import playerClass, platformClass, miscClasses
 
 
 def make_screen(fullscreen, window_scale, monitor_dim):
@@ -30,21 +25,29 @@ window_scale = 0.7  # bliver kun brugt hvis fullscreen er deaktiveret
 monitor_dim = (pygame.display.Info().current_w, pygame.display.Info().current_h)
 screen, screen_scale = make_screen(fullscreen, window_scale, monitor_dim)
 
-pygame.display.set_icon(pygame.image.load(os.path.join('Assets', 'icon.png')))
+icon_img = pygame.image.load(os.path.join('Assets', 'icon.png'))
+pygame.display.set_icon(icon_img)
 pygame.display.set_caption('Vores spil der bare sparker røv')
 
-
 scroll = 0
-cam_speed = 1000
+cam_speed = 700
 
 colliders = []
-Mark = player.Player(position=(300, 500), speed=(cam_speed, 0), size=(40, 40), color=(66, 135, 245), colliders=colliders)
-Ground = misc_classes.Platform(position=(0, 880), size=(1920, 200), colliders=colliders)
-Ground2 = misc_classes.Platform(position=(1920, 700), size=(3000, 50), colliders=colliders)
+Ground = platformClass.Platform(position=(0, 880), length=38, colliders=colliders)
+Ground2 = platformClass.Platform(position=(1920, 700), length=60, colliders=colliders)
+
+Mark = playerClass.Player(position=(300, 500),
+                          speed=(cam_speed, 0),
+                          size=(40, 40),
+                          color=(255, 0, 242),
+                          colliders=colliders)
 
 min_delta_time = 0.003
+max_delta_time = 0.066
 delta_time = 0
 pre_time = pygame.time.get_ticks() / 1000
+FPS_low_img = pygame.image.load(os.path.join('Assets', 'FPS Low.png'))
+FPS_low = False
 
 quit_game = False
 paused = False
@@ -72,29 +75,34 @@ while not quit_game:
             # toggle fullscreen
             if event.key == pygame.K_TAB:
                 fullscreen = not fullscreen
-                _, screen_scale = make_screen(fullscreen, window_scale, monitor_dim)
-
-    key_input = pygame.key.get_pressed()
+                screen, screen_scale = make_screen(fullscreen, window_scale, monitor_dim)
 
     # update
     if not paused:
-        Ground.update(delta_time)
-        Ground2.update(delta_time)
-        Mark.update(delta_time, space_pressed)
+        Mark.update(delta_time, cam_speed, space_pressed)
         scroll += cam_speed * delta_time
 
     # draw
-    screen.fill((255, 255, 255))
+    screen.fill((74, 228, 255))
     Ground.draw(screen, scroll, screen_scale)
     Ground2.draw(screen, scroll, screen_scale)
     Mark.draw(screen, scroll, screen_scale)
+    if FPS_low:
+        FPS_low_img = pygame.transform.scale(FPS_low_img, (round(192 * screen_scale), round(36 * screen_scale)))
+        screen.blit(FPS_low_img, (round(1723 * screen_scale), round(5 * screen_scale)))
     pygame.display.flip()
 
     # delta time
+    FPS_low = False
     delta_time = (pygame.time.get_ticks() / 1000) - pre_time
     pre_time = pygame.time.get_ticks() / 1000
+
     if delta_time < min_delta_time:
         time.sleep(min_delta_time - delta_time)
         delta_time += (pygame.time.get_ticks() / 1000) - pre_time
         pre_time = pygame.time.get_ticks() / 1000
-#oh yeah yeah
+
+    elif delta_time > max_delta_time:
+        delta_time = max_delta_time
+        FPS_low = True
+# oh yeah yeah
