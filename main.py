@@ -3,7 +3,6 @@ import pygame, time, os, ctypes, platform
 # Vores egne
 import playerClass, platformClass, miscClasses
 
-
 def make_screen(fullscreen, window_scale, monitor_dim):
     if fullscreen:
         screen_scale = monitor_dim[0] / 1920
@@ -16,6 +15,11 @@ def make_screen(fullscreen, window_scale, monitor_dim):
 
 # init main loop
 pygame.init()
+
+
+pygame.mixer.music.load(os.path.join('/Assets/Sounds/music.mp3'))
+pygame.mixer.music.play(-1)
+
 
 if platform.system() == "Windows":
     ctypes.windll.user32.SetProcessDPIAware()   # ignorer Windows skærm-skalering
@@ -67,6 +71,7 @@ while not quit_game:
             # jump
             if event.key == pygame.K_SPACE:
                 space_pressed = True
+
 
             # pause
             if event.key == pygame.K_ESCAPE:
