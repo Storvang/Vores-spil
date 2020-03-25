@@ -18,7 +18,6 @@ pygame.init()
 
 
 pygame.mixer.music.load(os.path.join('/Assets/Sounds/music.mp3'))
-pygame.mixer.music.play(-1)
 
 
 if platform.system() == "Windows":
