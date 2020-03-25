@@ -20,12 +20,12 @@ class Platform:
         self.colliders.append(self.rect)
 
         # construct platform image
-        self.platform_img = pygame.Surface(self.size, pygame.SRCALPHA, 32)
-        self.platform_img = self.platform_img.convert_alpha()
-        self.platform_img.blit(platform_left_img, (0, 0))
+        self.image = pygame.Surface(self.size, pygame.SRCALPHA, 32)
+        self.image = self.image.convert_alpha()
+        self.image.blit(platform_left_img, (0, 0))
         for i in range(50, self.rect.width - 50, 50):
-            self.platform_img.blit(platform_middle_img, (i, 0))
-        self.platform_img.blit(platform_right_img, (self.size.x - 50, 0))
+            self.image.blit(platform_middle_img, (i, 0))
+        self.image.blit(platform_right_img, (self.size.x - 50, 0))
 
     def draw(self, screen, scroll, scale):
         render_rect = pygame.Rect(round((self.position.x - scroll) * scale),
@@ -33,7 +33,7 @@ class Platform:
                                   round(self.size.x * scale),
                                   round(self.size.y * scale))
 
-        render_img = pygame.transform.scale(self.platform_img, render_rect.size)
+        render_img = pygame.transform.scale(self.image, render_rect.size)
         screen.blit(render_img, render_rect.topleft)
 
     def __del__(self):
