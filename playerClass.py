@@ -3,22 +3,22 @@ import pygame, math, os
 
 
 MarkFrame1 = pygame.image.load(os.path.join('Assets', 'MarkFrames', 'RunningMark(NW)', 'MarkNW1.png'))
-MarkFrame1 = pygame.transform.scale(MarkFrame1, (40, 40))
+MarkFrame1 = pygame.transform.scale(MarkFrame1, (50, 50))
 
 MarkFrame2 = pygame.image.load(os.path.join('Assets', 'MarkFrames', 'RunningMark(NW)', 'MarkNW2.png'))
-MarkFrame2 = pygame.transform.scale(MarkFrame2, (40, 40))
+MarkFrame2 = pygame.transform.scale(MarkFrame2, (50, 50))
 
 MarkFrame3 = pygame.image.load(os.path.join('Assets', 'MarkFrames', 'RunningMark(NW)', 'MarkNW3.png'))
-MarkFrame3 = pygame.transform.scale(MarkFrame3, (40, 40))
+MarkFrame3 = pygame.transform.scale(MarkFrame3, (50, 50))
 
 MarkFrame4 = pygame.image.load(os.path.join('Assets', 'MarkFrames', 'RunningMark(NW)', 'MarkNW4.png'))
-MarkFrame4 = pygame.transform.scale(MarkFrame4, (40, 40))
+MarkFrame4 = pygame.transform.scale(MarkFrame4, (50, 50))
 
 MarkFrame5 = pygame.image.load(os.path.join('Assets', 'MarkFrames', 'RunningMark(NW)', 'MarkNW5.png'))
-MarkFrame5 = pygame.transform.scale(MarkFrame5, (40, 40))
+MarkFrame5 = pygame.transform.scale(MarkFrame5, (50, 50))
 
 MarkFrame6 = pygame.image.load(os.path.join('Assets', 'MarkFrames', 'RunningMark(NW)', 'MarkNW6.png'))
-MarkFrame6 = pygame.transform.scale(MarkFrame6, (40, 40))
+MarkFrame6 = pygame.transform.scale(MarkFrame6, (50, 50))
 
 MarkFrame7 = pygame.image.load(os.path.join('Assets', 'MarkFrames', 'RunningMark(NW)', 'MarkNW7.png'))
 MarkFrame7 = pygame.transform.scale(MarkFrame7, (40, 40))
