@@ -65,10 +65,12 @@ class Player(pygame.sprite.Sprite):
     def update(self, delta_time, speed, jump_pressed):
 
         # jump
+        if self.grounded:
+            self.air_jumps = self.max_air_jumps
+
         if jump_pressed and self.grounded:
             self.speed.y = -self.jump_power
             self.g = self.jump_g
-            self.air_jumps = self.max_air_jumps
 
         elif jump_pressed and self.air_jumps > 0:
             self.speed.y = -self.double_jump_power

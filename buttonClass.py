@@ -38,13 +38,20 @@ class Button:
 
         return button_clicked
 
-    def draw(self, screen, scale, offset):
-        # animate
-        if self.anim == 'mouse_over' and self.anim_time <= 0.1:
+    def mouse_over_anim(self):
+        if self.anim_time <= 0.1:
             self.anim_offset = pygame.Vector2(0, self.anim_time * -100)
 
-        elif self.anim == 'mouse_not_over' and self.anim_time <= 0.1:
+    def mouse_not_over_anim(self):
+        if self.anim_time <= 0.1:
             self.anim_offset = pygame.Vector2(0, self.anim_time * 100 - 10)
+
+    def draw(self, screen, scale, offset):
+        # animate
+        if self.anim is not None:
+            anim_function = {'mouse_over': self.mouse_over_anim,
+                             'mouse_not_over': self.mouse_not_over_anim}[self.anim]
+            anim_function()
 
         render_rect = pygame.Rect(round((self.position.x + self.anim_offset.x + offset.x) * scale),
                                   round((self.position.y + self.anim_offset.y + offset.y) * scale),

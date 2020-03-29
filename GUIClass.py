@@ -42,13 +42,19 @@ class GUI:
             self.anim_time += delta_time
         self.pre_anim = self.anim
 
-    def draw(self, screen, scale):
-        # animate
-        if self.anim == 'start_game' and self.anim_time <= 1:
+    def start_game_anim(self):
+        if self.anim_time <= 1:
             self.anim_offset = pygame.Vector2(0, -1080 * 0.5 * ((self.anim_time / 0.5) ** 2 - (self.anim_time / 0.5)))
-        elif self.anim == 'start_game' and self.anim_time > 0.5:
+        elif self.anim_time > 1:
             self.scene = 'game'
             self.anim = None
+
+    def draw(self, screen, scale):
+
+        # animate
+        if self.anim is not None:
+            anim_function = {"start_game": self.start_game_anim}[self.anim]
+            anim_function()
 
         self.play_button.draw(screen, scale, self.anim_offset)
         self.fullscreen_button.draw(screen, scale, self.anim_offset)
