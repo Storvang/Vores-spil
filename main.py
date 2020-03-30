@@ -16,7 +16,9 @@ def make_screen(fullscreen, window_scale, monitor_dim):
 # init main loop
 pygame.init()
 
-pygame.mixer.music.load(os.path.join('Assets', 'Sounds', 'music.mp3'))
+jumb_sound = pygame.mixer.Sound(os.path.join('Assets', 'Sounds', 'jumb.ogg'))
+
+pygame.mixer.music.load(os.path.join('Assets', 'Sounds', 'game_music.ogg'))
 pygame.mixer.music.play(-1)
 
 if platform.system() == "Windows":
@@ -57,7 +59,6 @@ FPS_low = False
 
 quit_game = False
 paused = False
-
 # main loop
 while not quit_game:
 
@@ -73,11 +74,18 @@ while not quit_game:
             # jump
             if event.key == pygame.K_SPACE:
                 space_pressed = True
-
+                if space_pressed:
+                    pygame.mixer.Sound.play(jumb_sound)
 
             # pause
             if event.key == pygame.K_ESCAPE and GUI.scene == 'game':
                 paused = not paused
+                if paused:
+                    pygame.mixer.music.pause()
+                else:
+                    pygame.mixer.music.unpause()
+
+
 
             # toggle fullscreen
             if event.key == pygame.K_TAB:
@@ -98,6 +106,7 @@ while not quit_game:
     if GUI.scene == 'game' and not paused:
         Mark.update(delta_time, cam_speed, space_pressed)
         scroll += cam_speed * delta_time
+
 
     # draw
     screen.fill((74, 228, 255))
