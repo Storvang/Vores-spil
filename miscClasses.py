@@ -1,3 +1,6 @@
+import pygame
+
+
 class Coin:
     def __init__(self, position):
         pass
@@ -50,15 +53,4 @@ class Projectile:
         pass
 
     def draw(self, screen, scroll, scale):
-        pass
-
-
-class Button:
-    def __init__(self, position, scale, images):
-        pass
-
-    def update(self, mouse_pos, mouse_clicked):
-        pass
-
-    def draw(self, screen, scale):
         pass
