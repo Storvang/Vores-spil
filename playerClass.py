@@ -3,22 +3,22 @@ import pygame, math, os
 
 
 MarkFrame1 = pygame.image.load(os.path.join('Assets', 'MarkFrames', 'RunningMark(NW)', 'MarkNW1.png'))
-MarkFrame1 = pygame.transform.scale(MarkFrame1, (40, 40))
+MarkFrame1 = pygame.transform.scale(MarkFrame1, (50, 50))
 
 MarkFrame2 = pygame.image.load(os.path.join('Assets', 'MarkFrames', 'RunningMark(NW)', 'MarkNW2.png'))
-MarkFrame2 = pygame.transform.scale(MarkFrame2, (40, 40))
+MarkFrame2 = pygame.transform.scale(MarkFrame2, (50, 50))
 
 MarkFrame3 = pygame.image.load(os.path.join('Assets', 'MarkFrames', 'RunningMark(NW)', 'MarkNW3.png'))
-MarkFrame3 = pygame.transform.scale(MarkFrame3, (40, 40))
+MarkFrame3 = pygame.transform.scale(MarkFrame3, (50, 50))
 
 MarkFrame4 = pygame.image.load(os.path.join('Assets', 'MarkFrames', 'RunningMark(NW)', 'MarkNW4.png'))
-MarkFrame4 = pygame.transform.scale(MarkFrame4, (40, 40))
+MarkFrame4 = pygame.transform.scale(MarkFrame4, (50, 50))
 
 MarkFrame5 = pygame.image.load(os.path.join('Assets', 'MarkFrames', 'RunningMark(NW)', 'MarkNW5.png'))
-MarkFrame5 = pygame.transform.scale(MarkFrame5, (40, 40))
+MarkFrame5 = pygame.transform.scale(MarkFrame5, (50, 50))
 
 MarkFrame6 = pygame.image.load(os.path.join('Assets', 'MarkFrames', 'RunningMark(NW)', 'MarkNW6.png'))
-MarkFrame6 = pygame.transform.scale(MarkFrame6, (40, 40))
+MarkFrame6 = pygame.transform.scale(MarkFrame6, (50, 50))
 
 MarkFrame7 = pygame.image.load(os.path.join('Assets', 'MarkFrames', 'RunningMark(NW)', 'MarkNW7.png'))
 MarkFrame7 = pygame.transform.scale(MarkFrame7, (40, 40))
@@ -26,8 +26,8 @@ MarkFrame7 = pygame.transform.scale(MarkFrame7, (40, 40))
 MarkFrame8 = pygame.image.load(os.path.join('Assets', 'MarkFrames', 'RunningMark(NW)', 'MarkNW8.png'))
 MarkFrame8 = pygame.transform.scale(MarkFrame8, (40, 40))
 
-MarkAnimantion = [MarkFrame1, MarkFrame2, MarkFrame3, MarkFrame4, MarkFrame5, MarkFrame6, MarkFrame7, MarkFrame8]
-
+#MarkAnimation = [MarkFrame1, MarkFrame2, MarkFrame3, MarkFrame4, MarkFrame5, MarkFrame6, MarkFrame7, MarkFrame8]
+MarkAnimation = []
 
 
 class Player(pygame.sprite.Sprite):
@@ -49,10 +49,12 @@ class Player(pygame.sprite.Sprite):
         self.double_jump_power = 2.1
 
 
-        for M in MarkAnimantion:
-                self.Mark_img = pygame.Surface(self.size, pygame.SRCALPHA, 32)
-                self.Mark_img = self.Mark_img.convert_alpha()
-                self.Mark_img.blit(M, (0, 0))
+
+        self.Mark_img = pygame.Surface(self.size, pygame.SRCALPHA, 32)
+        self.Mark_img = self.Mark_img.convert_alpha()
+        for i in range(8):
+            MarkAnimation.append(os.path.join('Assets', 'MarkFrames', 'RunningMark(NW)' + str(i)))
+            self.Mark_img.blit, (i, 0)
 
 
 
