@@ -1,7 +1,7 @@
 import pygame, time, os, ctypes, platform
 
 # Vores egne
-import playerClass, platformClass, buttonClass, GUIClass, miscClasses
+import playerClass, platformClass, GUIElementClasses, GUIClass, miscClasses
 
 def make_screen(fullscreen, window_scale, monitor_dim):
     if fullscreen:
@@ -74,10 +74,13 @@ while not quit_game:
             if event.key == pygame.K_SPACE:
                 space_pressed = True
 
-
             # pause
-            if event.key == pygame.K_ESCAPE and GUI.scene == 'game':
+            if event.key == pygame.K_ESCAPE and GUI.scene != 'start_menu':
                 paused = not paused
+                if paused:
+                    GUI.scene = 'pause_menu'
+                else:
+                    GUI.scene = 'game'
 
             # toggle fullscreen
             if event.key == pygame.K_TAB:
@@ -95,7 +98,7 @@ while not quit_game:
         fullscreen = GUI.fullscreen
         screen, screen_scale = make_screen(fullscreen, window_scale, monitor_dim)
 
-    if GUI.scene == 'game' and not paused:
+    if GUI.scene == 'game':
         Mark.update(delta_time, cam_speed, space_pressed)
         scroll += cam_speed * delta_time
 
