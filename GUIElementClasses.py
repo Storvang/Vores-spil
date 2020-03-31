@@ -1,12 +1,26 @@
 import pygame, math
 
 
-class Button:
-    def __init__(self, position, size, images):
+class Image:
+    def __init__(self, position, size, image):
         self.position = pygame.Vector2(position)
         self.size = pygame.Vector2(size)
+        self.image = image
+
+    def draw(self, screen, scale, offset):
+        render_rect = pygame.Rect(round((self.position.x + offset.x) * scale),
+                                  round((self.position.y + offset.y) * scale),
+                                  round(self.size.x * scale),
+                                  round(self.size.y * scale))
+
+        render_img = pygame.transform.scale(self.image, render_rect.size)
+        screen.blit(render_img, render_rect.topleft)
+
+
+class Button(Image):
+    def __init__(self, position, size, images):
         self.images = images
-        self.image = self.images[0]
+        Image.__init__(self, position, size, images[0])
 
         self.anim = None
         self.pre_anim = None
@@ -38,25 +52,21 @@ class Button:
 
         return button_clicked
 
-    def mouse_over_anim(self):
-        if self.anim_time <= 0.1:
-            self.anim_offset = pygame.Vector2(0, self.anim_time * -100)
-
-    def mouse_not_over_anim(self):
-        if self.anim_time <= 0.1:
-            self.anim_offset = pygame.Vector2(0, self.anim_time * 100 - 10)
-
     def draw(self, screen, scale, offset):
+        # animations
+        def mouse_over():
+            if self.anim_time <= 0.1:
+                self.anim_offset = pygame.Vector2(0, self.anim_time * -100)
+
+        def mouse_not_over():
+            if self.anim_time <= 0.1:
+                self.anim_offset = pygame.Vector2(0, self.anim_time * 100 - 10)
+
         # animate
         if self.anim is not None:
-            anim_function = {'mouse_over': self.mouse_over_anim,
-                             'mouse_not_over': self.mouse_not_over_anim}[self.anim]
+            anim_function = {'mouse_over': mouse_over,
+                             'mouse_not_over': mouse_not_over}[self.anim]
             anim_function()
 
-        render_rect = pygame.Rect(round((self.position.x + self.anim_offset.x + offset.x) * scale),
-                                  round((self.position.y + self.anim_offset.y + offset.y) * scale),
-                                  round(self.size.x * scale),
-                                  round(self.size.y * scale))
-
-        render_img = pygame.transform.scale(self.image, render_rect.size)
-        screen.blit(render_img, render_rect.topleft)
+        # render
+        Image.draw(self, screen, scale, offset + self.anim_offset)
