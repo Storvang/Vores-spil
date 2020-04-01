@@ -88,7 +88,7 @@ class Player(pygame.sprite.Sprite):
         self.position.x += self.speed.x * delta_time
 
         self.speed.y += self.g/2 * delta_time * speed
-        self.position.y += self.speed.y * delta_time * speed   # spilleren skal kun bevæge sig med den gennemsnitlige fart
+        self.position.y += self.speed.y * delta_time * speed # spilleren skal kun bevæge sig med den gennemsnitlige fart
         self.speed.y += self.g/2 * delta_time * speed
 
         # collisions
