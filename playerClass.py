@@ -1,7 +1,6 @@
 import pygame, math, os
 
 
-
 MarkFrame1 = pygame.image.load(os.path.join('Assets', 'MarkFrames', 'RunningMark(NW)', 'MarkNW1.png'))
 MarkFrame1 = pygame.transform.scale(MarkFrame1, (50, 50))
 
@@ -31,7 +30,10 @@ MarkAnimation = []
 
 
 class Player(pygame.sprite.Sprite):
+
+
     def __init__(self, position, speed, size, color, colliders):
+        self.jumb_sound = pygame.mixer.Sound(os.path.join('Assets', 'Sounds', 'jumb.ogg'))
         self.position = pygame.Vector2(position)
         self.speed = pygame.Vector2(speed)
         self.size = pygame.Vector2(size)
@@ -61,18 +63,18 @@ class Player(pygame.sprite.Sprite):
 
 
 
-
-
-
     def update(self, delta_time, speed, jump_pressed):
 
+
         # jump
+
         if self.grounded:
             self.air_jumps = self.max_air_jumps
 
         if jump_pressed and self.grounded:
             self.speed.y = -self.jump_power
             self.g = self.jump_g
+            pygame.mixer.Sound.play(self.jumb_sound)
 
         elif jump_pressed and self.air_jumps > 0:
             self.speed.y = -self.double_jump_power
