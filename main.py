@@ -32,21 +32,7 @@ icon_img = pygame.image.load(os.path.join('Assets', 'icon.png'))
 pygame.display.set_icon(icon_img)
 pygame.display.set_caption('Vores spil der bare sparker røv')
 
-scroll = 0
-cam_speed = 700
-
 GUI = GUIClass.GUI()
-
-colliders = []
-Ground = platformClass.Platform(position=(0, 880), length=38, colliders=colliders)
-Ground2 = platformClass.Platform(position=(1920, 700), length=60, colliders=colliders)
-
-Mark = playerClass.Player(position=(300, -50),
-                          speed=(cam_speed, 0),
-                          size=(40, 40),
-                          color=(255, 0, 242),
-                          colliders=colliders)
-
 
 min_delta_time = 0.003
 max_delta_time = 0.066
@@ -55,7 +41,7 @@ pre_time = pygame.time.get_ticks() / 1000
 FPS_low_img = pygame.image.load(os.path.join('Assets', 'FPS Low.png'))
 FPS_low = False
 
-
+game_init = True
 quit_game = False
 paused = False
 
@@ -64,6 +50,7 @@ while not quit_game:
 
     # input
     space_pressed = False
+    mouse_up = False
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -76,7 +63,7 @@ while not quit_game:
                 space_pressed = True
 
             # pause
-            if event.key == pygame.K_ESCAPE and GUI.scene != 'start_menu':
+            elif event.key == pygame.K_ESCAPE and GUI.scene != 'start_menu' and GUI.transition is None:
                 paused = not paused
                 if paused:
                     GUI.scene = 'pause_menu'
@@ -84,7 +71,7 @@ while not quit_game:
                     GUI.scene = 'game'
 
             # toggle fullscreen
-            if event.key == pygame.K_TAB:
+            elif event.key == pygame.K_TAB:
                 fullscreen = not fullscreen
                 GUI.fullscreen = fullscreen
                 screen, screen_scale = make_screen(fullscreen, window_scale, monitor_dim)
@@ -92,9 +79,25 @@ while not quit_game:
     mouse_pos = pygame.Vector2(pygame.mouse.get_pos()) / screen_scale
     mouse_down = pygame.mouse.get_pressed()[0]
 
-    # update
     GUI.update(mouse_pos, mouse_down, delta_time)
 
+    if game_init or GUI.game_reset:
+        scroll = 0
+        cam_speed = 700
+
+        colliders = []
+        Ground = platformClass.Platform(position=(0, 880), length=38, colliders=colliders)
+        Ground2 = platformClass.Platform(position=(1920, 700), length=60, colliders=colliders)
+
+        Mark = playerClass.Player(position=(300, -50),
+                                  speed=(cam_speed, 0),
+                                  size=(40, 40),
+                                  color=(255, 0, 242),
+                                  colliders=colliders)
+        game_init = False
+        GUI.game_reset = False
+
+    # update
     if GUI.fullscreen != fullscreen:
         fullscreen = GUI.fullscreen
         screen, screen_scale = make_screen(fullscreen, window_scale, monitor_dim)
