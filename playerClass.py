@@ -1,5 +1,6 @@
-import pygame, math, os
+import pygame, math, os, glob
 
+Danel = pygame.image.load(os.path.join('Assets', 'CoolDaniel.png'))
 
 MarkFrame1 = pygame.image.load(os.path.join('Assets', 'MarkFrames', 'RunningMark(NW)', 'MarkNW1.png'))
 MarkFrame1 = pygame.transform.scale(MarkFrame1, (50, 50))
@@ -25,8 +26,8 @@ MarkFrame7 = pygame.transform.scale(MarkFrame7, (40, 40))
 MarkFrame8 = pygame.image.load(os.path.join('Assets', 'MarkFrames', 'RunningMark(NW)', 'MarkNW8.png'))
 MarkFrame8 = pygame.transform.scale(MarkFrame8, (40, 40))
 
-#MarkAnimation = [MarkFrame1, MarkFrame2, MarkFrame3, MarkFrame4, MarkFrame5, MarkFrame6, MarkFrame7, MarkFrame8]
-MarkAnimation = []
+MarkAnimation = [MarkFrame1, MarkFrame2, MarkFrame3, MarkFrame4, MarkFrame5, MarkFrame6, MarkFrame7, MarkFrame8]
+#MarkAnimation = []
 
 
 class Player(pygame.sprite.Sprite):
@@ -81,6 +82,8 @@ class Player(pygame.sprite.Sprite):
             self.g = self.jump_g
             self.air_jumps -= 1
 
+
+
         # update speed/position
         pre_y = self.position.y
 
@@ -131,11 +134,11 @@ class Player(pygame.sprite.Sprite):
                                   round(self.size.x * scale),
                                   round(self.size.y * scale))
 
-        render_img = pygame.transform.scale(self.Mark_img, render_rect.size)
+        render_img = pygame.transform.scale(MarkFrame1, render_rect.size)
         screen.blit(render_img, render_rect.topleft)
 
 
 
-        #pygame.draw.rect(screen, self.color, render_rect)
+       # pygame.draw.rect(screen, self.color, render_rect)
 
 
