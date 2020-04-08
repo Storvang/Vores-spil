@@ -45,14 +45,12 @@ FPS_low = False
 
 game_init = True
 quit_game = False
-paused = False
 
 # main loop
 while not quit_game:
 
     # input
     space_pressed = False
-    mouse_up = False
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -66,11 +64,7 @@ while not quit_game:
 
             # pause
             elif event.key == pygame.K_ESCAPE and GUI.scene != 'start_menu' and GUI.transition is None:
-                paused = not paused
-                if paused:
-                    GUI.scene = 'pause_menu'
-                else:
-                    GUI.scene = 'game'
+                GUI.scene = 'game' if GUI.scene == 'pause_menu' else 'pause_menu'
 
             # toggle fullscreen
             elif event.key == pygame.K_TAB:
