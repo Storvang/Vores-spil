@@ -87,7 +87,6 @@ class GUI:
         self.pre_transition = self.transition
 
     def draw(self, screen, scale):
-
         # transitions
         def start_game():
             if self.transition_time <= 1:
@@ -137,6 +136,26 @@ class GUI:
         else:
             self.transition_offset = pygame.Vector2(0, 0)
 
+        # reset scene
+        def game_reset():
+            pass
+
+        def start_menu_reset():
+            self.play_button.anim_reset()
+            self.fullscreen_button.anim_reset()
+
+        def pause_menu_reset():
+            self.resume_button.anim_reset()
+            self.replay_button.anim_reset()
+            self.home_button.anim_reset()
+
+        if self.scene != self.pre_scene:
+            print(self.scene)
+            scene_init_function = {'game': game_reset,
+                                   'start_menu': start_menu_reset,
+                                   'pause_menu': pause_menu_reset}[self.scene]
+            scene_init_function()
+
         # render
         def game():
             self.fade_foreground.draw(screen, scale, self.transition_offset)
@@ -158,3 +177,5 @@ class GUI:
                           'start_menu': start_menu,
                           'pause_menu': pause_menu}[self.scene]
         scene_function()
+
+        self.pre_scene = self.scene

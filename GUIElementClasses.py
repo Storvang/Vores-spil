@@ -26,12 +26,21 @@ class Button(Image):
     def __init__(self, position, size, images, alpha=255):
         self.images = images
         self.pre_mouse_down = False
+        self.pre_mouse_over = False
         Image.__init__(self, position, size, images[0], alpha)
 
         self.anim = None
         self.pre_anim = None
         self.anim_time = 0  # tid siden animationen gik igang
         self.anim_offset = pygame.Vector2(0, 0)     # positionen i animationen
+
+    def anim_reset(self):
+        self.pre_mouse_over = False
+        self.image = self.images[0]
+        self.anim = None
+        self.pre_anim = None
+        self.anim_time = 0
+        self.anim_offset = pygame.Vector2(0, 0)
 
     def update(self, mouse_pos, mouse_down, delta_time):
         mouse_lifted = self.pre_mouse_down and not mouse_down
@@ -45,13 +54,17 @@ class Button(Image):
             return True
         elif mouse_over and mouse_down:
             self.image = self.images[2]
-            self.anim = 'mouse_over'
         elif mouse_over and not mouse_down:
             self.image = self.images[1]
-            self.anim = 'mouse_over'
         elif not mouse_over:
             self.image = self.images[0]
+
+        if mouse_over:
+            self.anim = 'mouse_over'
+        elif not mouse_over and self.pre_mouse_over:
             self.anim = 'mouse_not_over'
+
+        self.pre_mouse_over = mouse_over
 
         # animation time
         if self.anim != self.pre_anim:
