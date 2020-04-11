@@ -77,13 +77,16 @@ while not quit_game:
 
     GUI.update(mouse_pos, mouse_down, delta_time)
 
+    # init new game
     if game_init or GUI.game_reset:
         scroll = 0
         cam_speed = 700
 
         colliders = []
+        obstacles = []
         Ground = platformClass.Platform(position=(0, 880), length=38, colliders=colliders)
         Ground2 = platformClass.Platform(position=(1920, 700), length=60, colliders=colliders)
+        Spike = miscClasses.Spike(position=(2000, 650), obstacles=obstacles)
 
         Mark = playerClass.Player(position=(300, -50),
                                   speed=(cam_speed, 0),
@@ -106,6 +109,7 @@ while not quit_game:
     screen.fill((74, 228, 255))
     Ground.draw(screen, scroll, screen_scale)
     Ground2.draw(screen, scroll, screen_scale)
+    Spike.draw(screen, scroll, screen_scale)
     Mark.draw(screen, scroll, screen_scale)
     GUI.draw(screen, screen_scale)
 
@@ -128,4 +132,6 @@ while not quit_game:
     elif delta_time > max_delta_time:
         delta_time = max_delta_time
         FPS_low = True
+
+    print(1 / delta_time)
 # oh yeah yeah

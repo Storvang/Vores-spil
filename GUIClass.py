@@ -47,10 +47,10 @@ class GUI:
         self.fade_foreground = GUIElementClasses.Image((0, 0), (1920, 1080), self.black_img, 0)
         self.fade_foreground.show = False
 
-        self.pause_title = GUIElementClasses.Image((610, 180), (700, 180), pause_title_img)
-        self.resume_button = GUIElementClasses.Button((835, 478), (250, 125), play_button_imgs)
-        self.replay_button = GUIElementClasses.Button((650, 478), (113, 125), replay_button_imgs)
-        self.home_button = GUIElementClasses.Button((1157, 478), (113, 125), home_button_imgs)
+        self.pause_title = GUIElementClasses.Image((610, 243), (700, 180), pause_title_img)
+        self.resume_button = GUIElementClasses.Button((835, 541), (250, 125), play_button_imgs)
+        self.replay_button = GUIElementClasses.Button((650, 541), (113, 125), replay_button_imgs)
+        self.home_button = GUIElementClasses.Button((1157, 541), (113, 125), home_button_imgs)
 
     def update(self, mouse_pos, mouse_down, delta_time):
         # scenes
@@ -87,6 +87,7 @@ class GUI:
         self.pre_transition = self.transition
 
     def draw(self, screen, scale):
+
         # transitions
         def start_game():
             if self.transition_time <= 1:
@@ -150,7 +151,6 @@ class GUI:
             self.home_button.anim_reset()
 
         if self.scene != self.pre_scene:
-            print(self.scene)
             scene_init_function = {'game': game_reset,
                                    'start_menu': start_menu_reset,
                                    'pause_menu': pause_menu_reset}[self.scene]
