@@ -19,6 +19,7 @@ load_button_imgs(home_button_imgs, 'Home Button', os.path.join('Assets', 'UI', '
 fullscreen_button_imgs = []
 load_button_imgs(fullscreen_button_imgs, 'Fullscreen Button', os.path.join('Assets', 'UI', 'Fullscreen Button'))
 
+
 pause_title_img = pygame.image.load(os.path.join('Assets', 'UI', 'Paused Title.png'))
 
 
@@ -63,6 +64,8 @@ class GUI:
 
             if self.fullscreen_button.update(mouse_pos, mouse_down, delta_time):
                 self.fullscreen = not self.fullscreen
+
+
 
         def pause_menu():
             if self.resume_button.update(mouse_pos, mouse_down, delta_time):
@@ -172,7 +175,6 @@ class GUI:
             self.replay_button.draw(screen, scale, self.transition_offset)
             self.home_button.draw(screen, scale, self.transition_offset)
             self.fade_foreground.draw(screen, scale, self.transition_offset)
-
         scene_function = {'game': game,
                           'start_menu': start_menu,
                           'pause_menu': pause_menu}[self.scene]
