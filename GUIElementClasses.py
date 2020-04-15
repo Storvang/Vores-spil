@@ -42,6 +42,7 @@ class Button(Image):
         self.anim_time = 0
         self.anim_offset = pygame.Vector2(0, 0)
 
+    # returnerer hvorvidt knappen er blevet aktiveret (trykket ned og sluppet igen)
     def update(self, mouse_pos, mouse_down, delta_time):
         mouse_lifted = self.pre_mouse_down and not mouse_down
         self.pre_mouse_down = mouse_down
