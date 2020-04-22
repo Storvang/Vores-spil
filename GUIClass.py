@@ -19,6 +19,11 @@ load_button_imgs(home_button_imgs, 'Home Button', os.path.join('Assets', 'UI', '
 fullscreen_button_imgs = []
 load_button_imgs(fullscreen_button_imgs, 'Fullscreen Button', os.path.join('Assets', 'UI', 'Fullscreen Button'))
 
+sound_on_button_imgs = []
+load_button_imgs(sound_on_button_imgs, 'Sound Button_on', os.path.join('Assets', 'UI', 'Sound Button off and on'))
+
+sound_off_button_imgs = []
+load_button_imgs(sound_off_button_imgs, 'Sound Button_off', os.path.join('Assets', 'UI', 'Sound Button off and on'))
 
 pause_title_img = pygame.image.load(os.path.join('Assets', 'UI', 'Paused Title.png'))
 
@@ -28,6 +33,7 @@ class GUI:
         self.scene = 'start_menu'
         self.pre_scene = None
 
+        self.sound_on = True
         self.fullscreen = False
         self.game_reset = False
 
@@ -53,6 +59,8 @@ class GUI:
         self.replay_button = GUIElementClasses.Button((650, 541), (113, 125), replay_button_imgs)
         self.home_button = GUIElementClasses.Button((1157, 541), (113, 125), home_button_imgs)
 
+        self.sound_button = GUIElementClasses.Button((1757, 905), (113, 125), sound_on_button_imgs)
+
     def update(self, mouse_pos, mouse_down, delta_time):
         # scenes
         def game():
@@ -62,10 +70,12 @@ class GUI:
             if self.play_button.update(mouse_pos, mouse_down, delta_time):
                 self.transition = 'start_game'
 
-            if self.fullscreen_button.update(mouse_pos, mouse_down, delta_time):
+            elif self.fullscreen_button.update(mouse_pos, mouse_down, delta_time):
                 self.fullscreen = not self.fullscreen
 
-
+            elif self.sound_button.update(mouse_pos, mouse_down, delta_time):
+                self.sound_on = not self.sound_on
+                self.sound_button.images = sound_on_button_imgs if self.sound_on else sound_off_button_imgs
 
         def pause_menu():
             if self.resume_button.update(mouse_pos, mouse_down, delta_time):
@@ -74,6 +84,10 @@ class GUI:
                 self.transition = 'restart_game'
             elif self.home_button.update(mouse_pos, mouse_down, delta_time):
                 self.transition = 'go_home'
+
+            elif self.sound_button.update(mouse_pos, mouse_down, delta_time):
+                self.sound_on = not self.sound_on
+                self.sound_button.images = sound_on_button_imgs if self.sound_on else sound_off_button_imgs
 
         if self.transition is None:
             scene_function = {'game': game,
@@ -147,11 +161,13 @@ class GUI:
         def start_menu_reset():
             self.play_button.anim_reset()
             self.fullscreen_button.anim_reset()
+            self.sound_button.anim_reset()
 
         def pause_menu_reset():
             self.resume_button.anim_reset()
             self.replay_button.anim_reset()
             self.home_button.anim_reset()
+            self.sound_button.anim_reset()
 
         if self.scene != self.pre_scene:
             scene_init_function = {'game': game_reset,
@@ -166,7 +182,7 @@ class GUI:
         def start_menu():
             self.play_button.draw(screen, scale, self.transition_offset)
             self.fullscreen_button.draw(screen, scale, self.transition_offset)
-            self.fade_foreground.draw(screen, scale, self.transition_offset)
+            self.sound_button.draw(screen, scale, self.transition_offset)
 
         def pause_menu():
             self.fade_background.draw(screen, scale, self.transition_offset)
@@ -174,10 +190,13 @@ class GUI:
             self.resume_button.draw(screen, scale, self.transition_offset)
             self.replay_button.draw(screen, scale, self.transition_offset)
             self.home_button.draw(screen, scale, self.transition_offset)
-            self.fade_foreground.draw(screen, scale, self.transition_offset)
+            self.sound_button.draw(screen, scale, self.transition_offset)
+
         scene_function = {'game': game,
                           'start_menu': start_menu,
                           'pause_menu': pause_menu}[self.scene]
         scene_function()
+
+        self.fade_foreground.draw(screen, scale, self.transition_offset)
 
         self.pre_scene = self.scene

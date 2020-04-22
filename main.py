@@ -25,6 +25,7 @@ pygame.mixer.music.play(-1)
 if platform.system() == "Windows":
     ctypes.windll.user32.SetProcessDPIAware()   # ignorer Windows skærm-skalering
 
+sound_on = True
 fullscreen = False
 window_scale = 0.7  # bliver kun brugt hvis fullscreen er deaktiveret
 monitor_dim = (pygame.display.Info().current_w, pygame.display.Info().current_h)
@@ -100,6 +101,14 @@ while not quit_game:
     if GUI.fullscreen != fullscreen:
         fullscreen = GUI.fullscreen
         screen, screen_scale = make_screen(fullscreen, window_scale, monitor_dim)
+
+    if GUI.sound_on != sound_on:
+        sound_on = GUI.sound_on
+        if sound_on:
+            pygame.mixer.music.unpause()
+        else:
+            pygame.mixer.music.pause()
+
 
     if GUI.scene == 'game':
         Mark.update(delta_time, cam_speed, space_pressed)
