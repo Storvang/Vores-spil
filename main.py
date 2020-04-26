@@ -89,11 +89,12 @@ while not quit_game:
         Ground2 = platformClass.Platform(position=(1920, 700), length=60, colliders=colliders)
         Spike = miscClasses.Spike(position=(2000, 650), obstacles=obstacles)
 
-        Mark = playerClass.Player(position=(300, -50),
+        Mark = playerClass.Player(position=(300, -200),
                                   speed=(cam_speed, 0),
-                                  size=(40, 40),
+                                  size=(95, 115),
                                   color=(255, 0, 242),
-                                  colliders=colliders)
+                                  colliders=colliders,
+                                  obstacles=obstacles)
         game_init = False
         GUI.game_reset = False
 

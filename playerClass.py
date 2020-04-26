@@ -1,6 +1,17 @@
-import pygame, math, os, glob
+#
+#
+#
+#
+#       Under ombygning
+#
+#
+#
+#
 
-Danel = pygame.image.load(os.path.join('Assets', 'CoolDaniel.png'))
+import pygame, math, os, glob
+import miscClasses
+
+MarkTest_img = pygame.image.load(os.path.join('Assets', 'MarkFrames', 'MarkTest.png'))
 
 MarkFrame1 = pygame.image.load(os.path.join('Assets', 'MarkFrames', 'RunningMark(NW)', 'MarkNW1.png'))
 MarkFrame1 = pygame.transform.scale(MarkFrame1, (50, 50))
@@ -30,16 +41,16 @@ MarkAnimation = [MarkFrame1, MarkFrame2, MarkFrame3, MarkFrame4, MarkFrame5, Mar
 #MarkAnimation = []
 
 
-class Player(pygame.sprite.Sprite):
+class Player(pygame.sprite.Sprite, miscClasses.GameObject):
 
 
-    def __init__(self, position, speed, size, color, colliders):
+    def __init__(self, position, speed, size, color, colliders, obstacles):
         self.jumb_sound = pygame.mixer.Sound(os.path.join('Assets', 'Sounds', 'jumb.ogg'))
-        self.position = pygame.Vector2(position)
         self.speed = pygame.Vector2(speed)
-        self.size = pygame.Vector2(size)
         self.color = color
         self.colliders = colliders
+        self.obstacles = obstacles
+        miscClasses.GameObject.__init__(self, position, size, MarkTest_img)
 
 
         self.grounded = False
@@ -53,11 +64,11 @@ class Player(pygame.sprite.Sprite):
 
 
 
-        self.Mark_img = pygame.Surface(self.size, pygame.SRCALPHA, 32)
-        self.Mark_img = self.Mark_img.convert_alpha()
-        for i in range(8):
-            MarkAnimation.append(os.path.join('Assets', 'MarkFrames', 'RunningMark(NW)' + str(i)))
-            self.Mark_img.blit, (i, 0)
+        # self.Mark_img = pygame.Surface(self.size, pygame.SRCALPHA, 32)
+        # self.Mark_img = self.Mark_img.convert_alpha()
+        # for i in range(8):
+        #     MarkAnimation.append(os.path.join('Assets', 'MarkFrames', 'RunningMark(NW)' + str(i)))
+        #     self.Mark_img.blit, (i, 0)
 
 
 
@@ -124,18 +135,25 @@ class Player(pygame.sprite.Sprite):
 
             collision = head_collider.collidelist(self.colliders)   # Collision er -1 hvis der ikke er nogen kollisioner
             was_under = pre_y >= self.colliders[collision].top
-            if not collision == -1 and was_under:
+            if collision != -1 and was_under:
                 self.position.y = self.colliders[collision].bottom
                 self.speed.y = 0
 
-    def draw(self, screen, scroll, scale):
-        render_rect = pygame.Rect(round((self.position.x - scroll) * scale),
-                                  round(self.position.y * scale),
-                                  round(self.size.x * scale),
-                                  round(self.size.y * scale))
+        # death
+        def die():
+            print("bruh")
 
-        render_img = pygame.transform.scale(MarkFrame1, render_rect.size)
-        screen.blit(render_img, render_rect.topleft)
+        body_collider = pygame.Rect(round(self.position.x),
+                                    round(self.position.y),
+                                    round(self.size.x),
+                                    round(self.size.y))
+
+        collision = body_collider.collidelist(self.obstacles)
+        if collision != -1:
+            die()
+
+    def draw(self, screen, scroll, scale):
+        miscClasses.GameObject.draw(self, screen, scroll, scale)
 
 
 
