@@ -62,6 +62,8 @@ class Player(pygame.sprite.Sprite, miscClasses.GameObject):
         self.jump_power = 2
         self.double_jump_power = 2.1
 
+        self.dead = False
+
 
 
         # self.Mark_img = pygame.Surface(self.size, pygame.SRCALPHA, 32)
@@ -140,17 +142,14 @@ class Player(pygame.sprite.Sprite, miscClasses.GameObject):
                 self.speed.y = 0
 
         # death
-        def die():
-            print("bruh")
-
         body_collider = pygame.Rect(round(self.position.x),
                                     round(self.position.y),
                                     round(self.size.x),
                                     round(self.size.y))
 
         collision = body_collider.collidelist(self.obstacles)
-        if collision != -1:
-            die()
+        if collision != -1 or self.position.y > 1130:
+            self.dead = True
 
     def draw(self, screen, scroll, scale):
         miscClasses.GameObject.draw(self, screen, scroll, scale)

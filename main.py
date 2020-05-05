@@ -44,8 +44,30 @@ pre_time = pygame.time.get_ticks() / 1000
 FPS_low_img = pygame.image.load(os.path.join('Assets', 'FPS Low.png'))
 FPS_low = False
 
-game_init = True
 quit_game = False
+
+
+def game_reset():
+    global scroll, cam_speed, colliders, obstacles, Ground, Ground2, Spike, Mark
+
+    scroll = 0
+    cam_speed = 700
+
+    colliders = []
+    obstacles = []
+    Ground = platformClass.Platform(position=(0, 880), length=38, colliders=colliders)
+    Ground2 = platformClass.Platform(position=(1920, 700), length=60, colliders=colliders)
+    Spike = miscClasses.Spike(position=(2000, 650), obstacles=obstacles)
+
+    Mark = playerClass.Player(position=(300, -200),
+                              speed=(cam_speed, 0),
+                              size=(95, 115),
+                              color=(255, 0, 242),
+                              colliders=colliders,
+                              obstacles=obstacles)
+
+
+game_reset()
 
 # main loop
 while not quit_game:
@@ -79,23 +101,8 @@ while not quit_game:
     GUI.update(mouse_pos, mouse_down, delta_time)
 
     # init new game
-    if game_init or GUI.game_reset:
-        scroll = 0
-        cam_speed = 700
-
-        colliders = []
-        obstacles = []
-        Ground = platformClass.Platform(position=(0, 880), length=38, colliders=colliders)
-        Ground2 = platformClass.Platform(position=(1920, 700), length=60, colliders=colliders)
-        Spike = miscClasses.Spike(position=(2000, 650), obstacles=obstacles)
-
-        Mark = playerClass.Player(position=(300, -200),
-                                  speed=(cam_speed, 0),
-                                  size=(95, 115),
-                                  color=(255, 0, 242),
-                                  colliders=colliders,
-                                  obstacles=obstacles)
-        game_init = False
+    if GUI.game_reset:
+        game_reset()
         GUI.game_reset = False
 
     # update
@@ -110,9 +117,11 @@ while not quit_game:
         else:
             pygame.mixer.music.pause()
 
-
     if GUI.scene == 'game':
         Mark.update(delta_time, cam_speed, space_pressed)
+        if Mark.dead:
+            GUI.transition = 'die'
+
         scroll += cam_speed * delta_time
 
     # draw
