@@ -13,6 +13,9 @@ load_button_imgs(play_button_imgs, 'Play Button', os.path.join('Assets', 'UI', '
 replay_button_imgs = []
 load_button_imgs(replay_button_imgs, 'Replay Button', os.path.join('Assets', 'UI', 'Replay Button'))
 
+wide_replay_button_imgs = []
+load_button_imgs(wide_replay_button_imgs, 'Wide Replay Button', os.path.join('Assets', 'UI', 'Wide Replay Button'))
+
 home_button_imgs = []
 load_button_imgs(home_button_imgs, 'Home Button', os.path.join('Assets', 'UI', 'Home Button'))
 
@@ -26,6 +29,8 @@ sound_off_button_imgs = []
 load_button_imgs(sound_off_button_imgs, 'Sound Button_off', os.path.join('Assets', 'UI', 'Sound Button off and on'))
 
 pause_title_img = pygame.image.load(os.path.join('Assets', 'UI', 'Paused Title.png'))
+
+death_title_img = pygame.image.load(os.path.join('Assets', 'UI', 'Death Title.png'))
 
 
 class GUI:
@@ -51,15 +56,20 @@ class GUI:
         self.black_img = pygame.Surface((1, 1))
         pygame.draw.rect(self.black_img, (0, 0, 0), (0, 0, 1, 1))
         self.fade_background = GUIElementClasses.Image((0, 0), (1920, 1080), self.black_img, 100)
-        self.fade_foreground = GUIElementClasses.Image((0, 0), (1920, 1080), self.black_img, 0)
-        self.fade_foreground.show = False
 
         self.pause_title = GUIElementClasses.Image((610, 243), (700, 180), pause_title_img)
         self.resume_button = GUIElementClasses.Button((835, 541), (250, 125), play_button_imgs)
         self.replay_button = GUIElementClasses.Button((650, 541), (113, 125), replay_button_imgs)
         self.home_button = GUIElementClasses.Button((1157, 541), (113, 125), home_button_imgs)
 
+        # init death menu
+        self.death_title = GUIElementClasses.Image((540, 243), (840, 180), death_title_img)
+        self.wide_replay_button = GUIElementClasses.Button((835, 541), (250, 125), wide_replay_button_imgs)
+
+        # init misc (ting som er med i flere scener)
         self.sound_button = GUIElementClasses.Button((1757, 905), (113, 125), sound_on_button_imgs)
+        self.fade_foreground = GUIElementClasses.Image((0, 0), (1920, 1080), self.black_img, 0)
+        self.fade_foreground.show = False
 
     def update(self, mouse_pos, mouse_down, delta_time):
         # scenes
@@ -89,10 +99,18 @@ class GUI:
                 self.sound_on = not self.sound_on
                 self.sound_button.images = sound_on_button_imgs if self.sound_on else sound_off_button_imgs
 
+        def death_menu():
+            if self.wide_replay_button.update(mouse_pos, mouse_down, delta_time):
+                self.transition = 'restart_game'
+
+            elif self.home_button.update(mouse_pos, mouse_down, delta_time):
+                self.transition = 'go_home'
+
         if self.transition is None:
             scene_function = {'game': game,
                               'start_menu': start_menu,
-                              'pause_menu': pause_menu}[self.scene]
+                              'pause_menu': pause_menu,
+                              'death_menu': death_menu}[self.scene]
             scene_function()
 
         # animation time
@@ -145,11 +163,16 @@ class GUI:
                 self.transition = None
                 self.fade_foreground.show = False
 
+        def die():
+            self.scene = 'death_menu'
+            self.transition = None
+
         # animate
         if self.transition is not None:
             transition_function = {'start_game': start_game,
                                    'restart_game': restart_game,
-                                   'go_home': go_home}[self.transition]
+                                   'go_home': go_home,
+                                   'die': die}[self.transition]
             transition_function()
         else:
             self.transition_offset = pygame.Vector2(0, 0)
@@ -169,10 +192,15 @@ class GUI:
             self.home_button.anim_reset()
             self.sound_button.anim_reset()
 
+        def death_menu_reset():
+            self.wide_replay_button.anim_reset()
+            self.home_button.anim_reset()
+
         if self.scene != self.pre_scene:
             scene_init_function = {'game': game_reset,
                                    'start_menu': start_menu_reset,
-                                   'pause_menu': pause_menu_reset}[self.scene]
+                                   'pause_menu': pause_menu_reset,
+                                   'death_menu': death_menu_reset}[self.scene]
             scene_init_function()
 
         # render
@@ -192,9 +220,15 @@ class GUI:
             self.home_button.draw(screen, scale, self.transition_offset)
             self.sound_button.draw(screen, scale, self.transition_offset)
 
+        def death_menu():
+            self.death_title.draw(screen, scale, self.transition_offset)
+            self.wide_replay_button.draw(screen, scale, self.transition_offset)
+            self.home_button.draw(screen, scale, self.transition_offset)
+
         scene_function = {'game': game,
                           'start_menu': start_menu,
-                          'pause_menu': pause_menu}[self.scene]
+                          'pause_menu': pause_menu,
+                          'death_menu': death_menu}[self.scene]
         scene_function()
 
         self.fade_foreground.draw(screen, scale, self.transition_offset)
