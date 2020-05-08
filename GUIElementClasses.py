@@ -2,7 +2,8 @@ import pygame, math
 
 
 class Image:
-    def __init__(self, position, size, image, alpha=255):
+    def __init__(self, position, size, image, list, alpha=255):
+        list.append(self)
         self.position = pygame.Vector2(position)
         self.size = pygame.Vector2(size)
         self.image = image
@@ -23,11 +24,11 @@ class Image:
 
 
 class Button(Image):
-    def __init__(self, position, size, images, alpha=255):
+    def __init__(self, position, size, images, list, alpha=255):
         self.images = images
         self.pre_mouse_down = False
         self.pre_mouse_over = False
-        Image.__init__(self, position, size, images[0], alpha)
+        Image.__init__(self, position, size, images[0], list, alpha)
 
         self.anim = None
         self.pre_anim = None

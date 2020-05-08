@@ -1,7 +1,7 @@
 import pygame, time, os, ctypes, platform
 
 # Vores egne
-import playerClass, platformClass, GUIElementClasses, GUIClass, miscClasses
+import playerClass, platformClass, GUIScenes, GUIClass, miscClasses
 
 
 def make_screen(fullscreen, window_scale, monitor_dim):
@@ -86,8 +86,11 @@ while not quit_game:
                 space_pressed = True
 
             # pause
-            elif event.key == pygame.K_ESCAPE and GUI.scene != 'start_menu' and GUI.transition is None:
-                GUI.scene = 'game' if GUI.scene == 'pause_menu' else 'pause_menu'
+            elif event.key == pygame.K_ESCAPE and GUI.scene != GUIScenes.StartMenu and GUI.transition is None:
+                if isinstance(GUI.scene, GUIScenes.PauseMenu):
+                    GUI.scene = GUIScenes.Game()
+                else:
+                    GUI.scene = GUIScenes.PauseMenu(GUI.sound_on)
 
             # toggle fullscreen
             elif event.key == pygame.K_TAB:
@@ -117,7 +120,7 @@ while not quit_game:
         else:
             pygame.mixer.music.pause()
 
-    if GUI.scene == 'game':
+    if isinstance(GUI.scene, GUIScenes.Game):
         Mark.update(delta_time, cam_speed, space_pressed)
         if Mark.dead:
             GUI.transition = 'die'
@@ -152,5 +155,5 @@ while not quit_game:
         delta_time = max_delta_time
         FPS_low = True
 
-    print(1 / delta_time)
+    # print(1 / delta_time)
 # oh yeah yeah
