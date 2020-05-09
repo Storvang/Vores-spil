@@ -1,36 +1,5 @@
-import pygame, os
+import pygame
 import GUIElementClasses, GUIScenes
-
-
-def load_button_imgs(list, prefix, path):
-    for i in range(3):
-        list.append(pygame.image.load(os.path.join(path, prefix + str(i) + '.png')))
-
-
-play_button_imgs = []
-load_button_imgs(play_button_imgs, 'Play Button', os.path.join('Assets', 'UI', 'Play Button v2'))
-
-replay_button_imgs = []
-load_button_imgs(replay_button_imgs, 'Replay Button', os.path.join('Assets', 'UI', 'Replay Button'))
-
-wide_replay_button_imgs = []
-load_button_imgs(wide_replay_button_imgs, 'Wide Replay Button', os.path.join('Assets', 'UI', 'Wide Replay Button'))
-
-home_button_imgs = []
-load_button_imgs(home_button_imgs, 'Home Button', os.path.join('Assets', 'UI', 'Home Button'))
-
-fullscreen_button_imgs = []
-load_button_imgs(fullscreen_button_imgs, 'Fullscreen Button', os.path.join('Assets', 'UI', 'Fullscreen Button'))
-
-sound_on_button_imgs = []
-load_button_imgs(sound_on_button_imgs, 'Sound Button_on', os.path.join('Assets', 'UI', 'Sound Button off and on'))
-
-sound_off_button_imgs = []
-load_button_imgs(sound_off_button_imgs, 'Sound Button_off', os.path.join('Assets', 'UI', 'Sound Button off and on'))
-
-pause_title_img = pygame.image.load(os.path.join('Assets', 'UI', 'Paused Title.png'))
-
-death_title_img = pygame.image.load(os.path.join('Assets', 'UI', 'Death Title.png'))
 
 
 class GUI:
@@ -55,7 +24,7 @@ class GUI:
 
     def update(self, mouse_pos, mouse_down, delta_time):
 
-        # funktioner som bliver kaldet af knapperne
+        # funktioner som bliver kaldt af knapperne
         def play():
             self.transition = 'start_game'
 
@@ -149,56 +118,6 @@ class GUI:
             self.transition_offset = pygame.Vector2(0, 0)
 
     def draw(self, screen, scale):
-
-        # # reset scene
-        # def game_reset():
-        #     pass
-        #
-        # def start_menu_reset():
-        #     pass
-        #     # self.play_button.anim_reset()
-        #     # self.fullscreen_button.anim_reset()
-        #     # self.sound_button.anim_reset()
-        #
-        # def pause_menu_reset():
-        #     self.resume_button.anim_reset()
-        #     self.replay_button.anim_reset()
-        #     self.home_button.anim_reset()
-        #     self.sound_button.anim_reset()
-        #
-        # def death_menu_reset():
-        #     self.wide_replay_button.anim_reset()
-        #     self.home_button.anim_reset()
-        #
-        # if self.scene != self.pre_scene:
-        #     scene_init_function = {'game': game_reset,
-        #                            'start_menu': start_menu_reset,
-        #                            'pause_menu': pause_menu_reset,
-        #                            'death_menu': death_menu_reset}[self.scene]
-        #     scene_init_function()
-
-        # # render
-        # def game():
-        #     self.fade_foreground.draw(screen, scale, self.transition_offset)
-        #
-        # def start_menu():
-        #     self.play_button.draw(screen, scale, self.transition_offset)
-        #     self.fullscreen_button.draw(screen, scale, self.transition_offset)
-        #     self.sound_button.draw(screen, scale, self.transition_offset)
-        #
-        # def pause_menu():
-        #     self.fade_background.draw(screen, scale, self.transition_offset)
-        #     self.pause_title.draw(screen, scale, self.transition_offset)
-        #     self.resume_button.draw(screen, scale, self.transition_offset)
-        #     self.replay_button.draw(screen, scale, self.transition_offset)
-        #     self.home_button.draw(screen, scale, self.transition_offset)
-        #     self.sound_button.draw(screen, scale, self.transition_offset)
-        #
-        # def death_menu():
-        #     self.death_title.draw(screen, scale, self.transition_offset)
-        #     self.wide_replay_button.draw(screen, scale, self.transition_offset)
-        #     self.home_button.draw(screen, scale, self.transition_offset)
-
         self.scene.draw(screen, scale, self.transition_offset)
         self.fade_foreground.draw(screen, scale, self.transition_offset)
 
