@@ -33,15 +33,23 @@ class Spike(GameObject):
         self.obstacles.remove(self.rect)
 
 
-class Coin:
-    def __init__(self, position):
-        pass
+coin_img = pygame.image.load(os.path.join('Assets', 'Dogecoin.png'))
 
-    def update(self):
-        pass
 
-    def draw(self, screen, scroll, scale):
-        pass
+class Coin(GameObject):
+    def __init__(self, position, coins):
+        size = (50, 50)
+        self.coins = coins
+        GameObject.__init__(self, position, size, coin_img)
+
+        self.rect = pygame.Rect(round(self.position.x), round(self.position.y), round(self.size.x), round(self.size.y))
+        self.coins.append(self)
+
+    def collect(self):
+        self.__del__()
+
+    def __del__(self):
+        self.coins.remove(self)
 
 
 class Enemy:

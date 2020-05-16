@@ -44,12 +44,16 @@ MarkAnimation = [MarkFrame1, MarkFrame2, MarkFrame3, MarkFrame4, MarkFrame5, Mar
 class Player(pygame.sprite.Sprite, miscClasses.GameObject):
 
 
-    def __init__(self, position, speed, size, color, colliders, obstacles):
+    def __init__(self, position, speed, size, color, colliders, obstacles, coins):
         self.jumb_sound = pygame.mixer.Sound(os.path.join('Assets', 'Sounds', 'jumb.ogg'))
         self.speed = pygame.Vector2(speed)
         self.color = color
         self.colliders = colliders
         self.obstacles = obstacles
+        self.coins = coins
+        self.coin_rects = []
+        for coin in coins:
+            self.coin_rects.append(coin.rect)
         miscClasses.GameObject.__init__(self, position, size, MarkTest_img)
 
 
@@ -141,12 +145,18 @@ class Player(pygame.sprite.Sprite, miscClasses.GameObject):
                 self.position.y = self.colliders[collision].bottom
                 self.speed.y = 0
 
-        # death
+        # coins
         body_collider = pygame.Rect(round(self.position.x),
                                     round(self.position.y),
                                     round(self.size.x),
                                     round(self.size.y))
 
+        collision = body_collider.collidelist(self.coin_rects)
+        if collision != -1:
+            collided_coin = self.coins[collision]
+            collided_coin.collect()
+
+        # death
         collision = body_collider.collidelist(self.obstacles)
         if collision != -1 or self.position.y > 1130:
             self.dead = True

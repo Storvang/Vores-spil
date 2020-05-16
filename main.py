@@ -55,16 +55,19 @@ def game_reset():
 
     colliders = []
     obstacles = []
+    coins = []
     Ground = platformClass.Platform(position=(0, 880), length=38, colliders=colliders)
     Ground2 = platformClass.Platform(position=(1920, 700), length=60, colliders=colliders)
     Spike = miscClasses.Spike(position=(2000, 650), obstacles=obstacles)
+    Coin = miscClasses.Coin(position=(2200, 700), coins=coins)
 
     Mark = playerClass.Player(position=(300, -200),
                               speed=(cam_speed, 0),
                               size=(95, 115),
                               color=(255, 0, 242),
                               colliders=colliders,
-                              obstacles=obstacles)
+                              obstacles=obstacles,
+                              coins=coins)
 
 
 game_reset()
@@ -120,7 +123,7 @@ while not quit_game:
         else:
             pygame.mixer.music.pause()
 
-    if isinstance(GUI.scene, GUIScenes.Game):
+    if isinstance(GUI.scene, GUIScenes.Game):   # Tjek at man ikke er på en menu
         Mark.update(delta_time, cam_speed, space_pressed)
         if Mark.dead:
             GUI.transition = 'die'
@@ -132,6 +135,7 @@ while not quit_game:
     Ground.draw(screen, scroll, screen_scale)
     Ground2.draw(screen, scroll, screen_scale)
     Spike.draw(screen, scroll, screen_scale)
+    Coin.draw(screen, scroll, screen_scale)
     Mark.draw(screen, scroll, screen_scale)
     GUI.draw(screen, screen_scale)
 
