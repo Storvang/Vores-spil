@@ -33,15 +33,22 @@ class Spike(GameObject):
         self.obstacles.remove(self.rect)
 
 
-class Coin:
-    def __init__(self, position):
-        pass
+coin_img = pygame.image.load(os.path.join('Assets', 'Dogecoin.png'))
+coin_sound = pygame.mixer.Sound(os.path.join('Assets', 'Sounds', 'coin.wav'))
 
-    def update(self):
-        pass
 
-    def draw(self, screen, scroll, scale):
-        pass
+class Coin(GameObject):
+    def __init__(self, position, coins):
+        size = (100, 100)
+        self.coins = coins
+        GameObject.__init__(self, position, size, coin_img)
+
+        self.rect = pygame.Rect(round(self.position.x), round(self.position.y), round(self.size.x), round(self.size.y))
+        self.coins.append(self)
+
+    def collect(self):
+        pygame.mixer.Sound.play(coin_sound)
+        self.coins.remove(self)
 
 
 class Enemy:

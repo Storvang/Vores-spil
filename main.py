@@ -1,7 +1,11 @@
 import pygame, time, os, ctypes, platform
 
-# Vores egne
-import playerClass, platformClass, GUIElementClasses, GUIClass, miscClasses
+# init pygame and mixer
+pygame.mixer.pre_init(22050, -16, 2, 512)
+pygame.init()
+pygame.mixer.init()
+
+import GUIClass, GUIScenes, GameInstanceClass   # Mixeren bliver nødt til at blive inittet før der kan indlæses lydfiler
 
 
 def make_screen(fullscreen, window_scale, monitor_dim):
@@ -15,10 +19,6 @@ def make_screen(fullscreen, window_scale, monitor_dim):
 
 
 # init main loop
-pygame.mixer.pre_init(22050, -16, 2, 512)
-pygame.init()
-pygame.mixer.init()
-
 pygame.mixer.music.load(os.path.join('Assets', 'Sounds', 'nokialovania.mp3'))
 pygame.mixer.music.play(-1)
 
@@ -35,8 +35,6 @@ icon_img = pygame.image.load(os.path.join('Assets', 'icon.png'))
 pygame.display.set_icon(icon_img)
 pygame.display.set_caption('Vores spil der bare sparker røv')
 
-GUI = GUIClass.GUI()
-
 min_delta_time = 0.003
 max_delta_time = 0.066
 delta_time = 0
@@ -44,30 +42,11 @@ pre_time = pygame.time.get_ticks() / 1000
 FPS_low_img = pygame.image.load(os.path.join('Assets', 'FPS Low.png'))
 FPS_low = False
 
+coin_count = 0
 quit_game = False
 
-
-def game_reset():
-    global scroll, cam_speed, colliders, obstacles, Ground, Ground2, Spike, Mark
-
-    scroll = 0
-    cam_speed = 700
-
-    colliders = []
-    obstacles = []
-    Ground = platformClass.Platform(position=(0, 880), length=38, colliders=colliders)
-    Ground2 = platformClass.Platform(position=(1920, 700), length=60, colliders=colliders)
-    Spike = miscClasses.Spike(position=(2000, 650), obstacles=obstacles)
-
-    Mark = playerClass.Player(position=(300, -200),
-                              speed=(cam_speed, 0),
-                              size=(95, 115),
-                              color=(255, 0, 242),
-                              colliders=colliders,
-                              obstacles=obstacles)
-
-
-game_reset()
+GUI = GUIClass.GUI()
+GameInstance = GameInstanceClass.GameInstance()
 
 # main loop
 while not quit_game:
@@ -86,8 +65,11 @@ while not quit_game:
                 space_pressed = True
 
             # pause
-            elif event.key == pygame.K_ESCAPE and GUI.scene != 'start_menu' and GUI.transition is None:
-                GUI.scene = 'game' if GUI.scene == 'pause_menu' else 'pause_menu'
+            elif event.key == pygame.K_ESCAPE and GUI.scene != GUIScenes.StartMenu and GUI.transition is None:
+                if isinstance(GUI.scene, GUIScenes.PauseMenu):
+                    GUI.scene = GUIScenes.Game()
+                else:
+                    GUI.scene = GUIScenes.PauseMenu(GUI.sound_on)
 
             # toggle fullscreen
             elif event.key == pygame.K_TAB:
@@ -98,11 +80,11 @@ while not quit_game:
     mouse_pos = pygame.Vector2(pygame.mouse.get_pos()) / screen_scale
     mouse_down = pygame.mouse.get_pressed()[0]
 
-    GUI.update(mouse_pos, mouse_down, delta_time)
+    GUI.update(mouse_pos, mouse_down, coin_count, delta_time)
 
     # init new game
     if GUI.game_reset:
-        game_reset()
+        GameInstance = GameInstanceClass.GameInstance()
         GUI.game_reset = False
 
     # update
@@ -117,19 +99,15 @@ while not quit_game:
         else:
             pygame.mixer.music.pause()
 
-    if GUI.scene == 'game':
-        Mark.update(delta_time, cam_speed, space_pressed)
-        if Mark.dead:
-            GUI.transition = 'die'
-
-        scroll += cam_speed * delta_time
+    if isinstance(GUI.scene, GUIScenes.Game):   # Tjek at man ikke er på en menu
+        coin_collected, dead = GameInstance.update(delta_time, space_pressed)
+        if coin_collected:
+            coin_count += 1
+        if dead:
+            GUI.scene = GUIScenes.DeathMenu()
 
     # draw
-    screen.fill((74, 228, 255))
-    Ground.draw(screen, scroll, screen_scale)
-    Ground2.draw(screen, scroll, screen_scale)
-    Spike.draw(screen, scroll, screen_scale)
-    Mark.draw(screen, scroll, screen_scale)
+    GameInstance.draw(screen, screen_scale)
     GUI.draw(screen, screen_scale)
 
     if FPS_low:
@@ -152,5 +130,5 @@ while not quit_game:
         delta_time = max_delta_time
         FPS_low = True
 
-    print(1 / delta_time)
+    # print(1 / delta_time)
 # oh yeah yeah
