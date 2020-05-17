@@ -19,8 +19,6 @@ for i in range(8):
 
 
 class Player(pygame.sprite.Sprite, miscClasses.GameObject):
-
-
     def __init__(self, position, speed, size, color, colliders, obstacles, coins):
         self.speed = pygame.Vector2(speed)
         self.color = color
@@ -30,7 +28,7 @@ class Player(pygame.sprite.Sprite, miscClasses.GameObject):
         self.coin_rects = []
         for coin in coins:
             self.coin_rects.append(coin.rect)
-        miscClasses.GameObject.__init__(self, position, size, MarkTest_img)
+        miscClasses.GameObject.__init__(self, position, size, MarkAnimation[1])
 
         self.anim = "running"
         self.pre_anim = None
