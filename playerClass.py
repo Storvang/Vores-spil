@@ -172,8 +172,8 @@ class Player(pygame.sprite.Sprite, miscClasses.GameObject):
         def running():
             self.image = MarkAnimation[math.floor((self.anim_time % 0.64) / 0.08)]
 
-            # if self.image == 0 or 5:
-            #     pygame.mixer.music.load(os.path.join('Assets', 'Sounds', 'Footsteps', 'Footstep2.mp3'))
+            if self.image == MarkAnimation[0] or MarkAnimation[4]:
+                pygame.mixer.music.load(os.path.join('Assets', 'Sounds', 'Footsteps', 'Footstep2.mp3'))
 
         # animate
         if self.anim is not None:
