@@ -4,6 +4,8 @@ import GUIElementClasses, GUIScenes
 
 class GUI:
     def __init__(self):
+        self.coin_count = [0]
+
         self.sound_on = True
         self.fullscreen = False
         self.game_reset = False
@@ -22,7 +24,8 @@ class GUI:
         self.fade_foreground = GUIElementClasses.Image((0, 0), (1920, 1080), black_img, [], 0)
         self.fade_foreground.show = False
 
-    def update(self, mouse_pos, mouse_down, delta_time):
+    def update(self, mouse_pos, mouse_down, coin_count, delta_time):
+        self.coin_count[0] = coin_count
 
         # funktioner som bliver kaldt af knapperne
         def play():
@@ -32,7 +35,7 @@ class GUI:
             self.transition = 'restart_game'
 
         def resume():
-            self.scene = GUIScenes.Game()
+            self.scene = GUIScenes.Game(self.coin_count)
 
         def go_home():
             self.transition = 'go_home'
@@ -68,7 +71,7 @@ class GUI:
             if self.transition_time <= 1:
                 self.transition_offset.y = -540 * ((self.transition_time / 0.5) ** 2 - (self.transition_time / 0.5))
             else:
-                self.scene = GUIScenes.Game()
+                self.scene = GUIScenes.Game(self.coin_count)
                 self.transition = None
 
         def restart_game():
@@ -79,7 +82,7 @@ class GUI:
             elif self.transition_stage == 0:
                 self.game_reset = True
                 self.transition_stage = 1
-                self.scene = GUIScenes.Game()
+                self.scene = GUIScenes.Game(self.coin_count)
 
             elif self.transition_stage == 1 and self.transition_time <= 1:
                 self.fade_foreground.alpha = -510 * (self.transition_time - 0.5) + 255

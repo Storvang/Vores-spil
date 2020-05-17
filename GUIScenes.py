@@ -28,9 +28,11 @@ load_button_imgs(sound_on_button_imgs, 'Sound Button_on', os.path.join('Assets',
 sound_off_button_imgs = []
 load_button_imgs(sound_off_button_imgs, 'Sound Button_off', os.path.join('Assets', 'UI', 'Sound Button off and on'))
 
+coin_img = pygame.image.load(os.path.join('Assets', 'Dogecoin.png'))
 pause_title_img = pygame.image.load(os.path.join('Assets', 'UI', 'Paused Title.png'))
-
 death_title_img = pygame.image.load(os.path.join('Assets', 'UI', 'Death Title.png'))
+
+pixel_font = pygame.font.Font(os.path.join('Assets', 'UI', 'Pixeled.ttf'), 35)
 
 
 class GUIScene:
@@ -46,7 +48,14 @@ class GUIScene:
 
 
 class Game(GUIScene):
-    pass
+    def __init__(self, coin_count):
+        self.coin_count = coin_count
+        GUIScene.__init__(self)
+        self.coin_logo = GUIElementClasses.Image((25, 25), (50, 50), coin_img, self.GUIElements)
+        self.coin_counter = GUIElementClasses.Text((90, -4), str(self.coin_count[0]), pixel_font, (217, 182, 11), self.GUIElements)
+
+    def update(self, mouse_pos, mouse_down, delta_time):
+        self.coin_counter.set_text(str(self.coin_count[0]))
 
 
 class StartMenu(GUIScene):

@@ -11,6 +11,8 @@
 import pygame, math, os, glob
 import miscClasses
 
+jump_sound = pygame.mixer.Sound(os.path.join('Assets', 'Sounds', 'jumb.ogg'))
+
 MarkTest_img = pygame.image.load(os.path.join('Assets', 'MarkFrames', 'MarkTest.png'))
 
 MarkFrame1 = pygame.image.load(os.path.join('Assets', 'MarkFrames', 'RunningMark(NW)', 'MarkNW1.png'))
@@ -45,7 +47,6 @@ class Player(pygame.sprite.Sprite, miscClasses.GameObject):
 
 
     def __init__(self, position, speed, size, color, colliders, obstacles, coins):
-        self.jumb_sound = pygame.mixer.Sound(os.path.join('Assets', 'Sounds', 'jumb.ogg'))
         self.speed = pygame.Vector2(speed)
         self.color = color
         self.colliders = colliders
@@ -66,6 +67,7 @@ class Player(pygame.sprite.Sprite, miscClasses.GameObject):
         self.jump_power = 2
         self.double_jump_power = 2.1
 
+        self.coin_collected = False
         self.dead = False
 
 
@@ -92,7 +94,7 @@ class Player(pygame.sprite.Sprite, miscClasses.GameObject):
         if jump_pressed and self.grounded:
             self.speed.y = -self.jump_power
             self.g = self.jump_g
-            pygame.mixer.Sound.play(self.jumb_sound)
+            pygame.mixer.Sound.play(jump_sound)
 
         elif jump_pressed and self.air_jumps > 0:
             self.speed.y = -self.double_jump_power
@@ -153,8 +155,13 @@ class Player(pygame.sprite.Sprite, miscClasses.GameObject):
 
         collision = body_collider.collidelist(self.coin_rects)
         if collision != -1:
+            self.coin_collected = True
+            del self.coin_rects[collision]
+
             collided_coin = self.coins[collision]
             collided_coin.collect()
+        else:
+            self.coin_collected = False
 
         # death
         collision = body_collider.collidelist(self.obstacles)

@@ -34,11 +34,12 @@ class Spike(GameObject):
 
 
 coin_img = pygame.image.load(os.path.join('Assets', 'Dogecoin.png'))
+coin_sound = pygame.mixer.Sound(os.path.join('Assets', 'Sounds', 'coin.wav'))
 
 
 class Coin(GameObject):
     def __init__(self, position, coins):
-        size = (50, 50)
+        size = (100, 100)
         self.coins = coins
         GameObject.__init__(self, position, size, coin_img)
 
@@ -46,9 +47,7 @@ class Coin(GameObject):
         self.coins.append(self)
 
     def collect(self):
-        self.__del__()
-
-    def __del__(self):
+        pygame.mixer.Sound.play(coin_sound)
         self.coins.remove(self)
 
 

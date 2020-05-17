@@ -97,3 +97,20 @@ class Button(Image):
 
         # render
         Image.draw(self, screen, scale, offset + self.anim_offset)
+
+
+class Text(Image):
+    def __init__(self, position, text, font, color, list, anti_aliasing=False, alpha=255):
+        self.font = font
+        self.color = color
+        self.anti_aliasing = anti_aliasing
+
+        image = self.font.render(text, self.anti_aliasing, self.color)
+        size = image.get_size()
+        Image.__init__(self, position, size, image, list, alpha)
+
+    def set_text(self, new_text):
+        image = self.font.render(new_text, self.anti_aliasing, self.color)
+
+        self.size = pygame.Vector2(image.get_size())
+        self.image = image
