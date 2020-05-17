@@ -118,9 +118,9 @@ class Player(pygame.sprite.Sprite, miscClasses.GameObject):
             self.g = self.fall_g
 
             # Tjek om den er landet på noget
-            foot_collider = pygame.Rect(round(self.position.x),
-                                        round(pre_y + self.size.y),
-                                        round(self.size.y),
+            foot_collider = pygame.Rect(math.ceil(self.position.x),
+                                        math.ceil(pre_y + self.size.y),
+                                        math.ceil(self.size.y),
                                         math.ceil((self.position.y + self.size.y) - (pre_y + self.size.y)))
 
             collision = foot_collider.collidelist(self.colliders)   # Collision er -1 hvis der ikke er nogen kollisioner
@@ -136,9 +136,9 @@ class Player(pygame.sprite.Sprite, miscClasses.GameObject):
             self.grounded = False
 
             # Tjek om den har stødt hovedet mod noget
-            head_collider = pygame.Rect(round(self.position.x),
-                                        round(pre_y),
-                                        round(self.size.y),
+            head_collider = pygame.Rect(math.ceil(self.position.x),
+                                        math.ceil(pre_y),
+                                        math.ceil(self.size.y),
                                         math.ceil(self.position.y - pre_y))
 
             collision = head_collider.collidelist(self.colliders)   # Collision er -1 hvis der ikke er nogen kollisioner
@@ -148,10 +148,10 @@ class Player(pygame.sprite.Sprite, miscClasses.GameObject):
                 self.speed.y = 0
 
         # coins
-        body_collider = pygame.Rect(round(self.position.x),
-                                    round(self.position.y),
-                                    round(self.size.x),
-                                    round(self.size.y))
+        body_collider = pygame.Rect(math.ceil(self.position.x),
+                                    math.ceil(self.position.y),
+                                    math.ceil(self.size.x),
+                                    math.ceil(self.size.y))
 
         collision = body_collider.collidelist(self.coin_rects)
         if collision != -1:
