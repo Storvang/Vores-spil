@@ -13,34 +13,9 @@ import miscClasses
 
 jump_sound = pygame.mixer.Sound(os.path.join('Assets', 'Sounds', 'jumb.ogg'))
 
-MarkTest_img = pygame.image.load(os.path.join('Assets', 'MarkFrames', 'MarkTest.png'))
-
-MarkFrame1 = pygame.image.load(os.path.join('Assets', 'MarkFrames', 'RunningMark(NW)', 'MarkNW1.png'))
-MarkFrame1 = pygame.transform.scale(MarkFrame1, (50, 50))
-
-MarkFrame2 = pygame.image.load(os.path.join('Assets', 'MarkFrames', 'RunningMark(NW)', 'MarkNW2.png'))
-MarkFrame2 = pygame.transform.scale(MarkFrame2, (50, 50))
-
-MarkFrame3 = pygame.image.load(os.path.join('Assets', 'MarkFrames', 'RunningMark(NW)', 'MarkNW3.png'))
-MarkFrame3 = pygame.transform.scale(MarkFrame3, (50, 50))
-
-MarkFrame4 = pygame.image.load(os.path.join('Assets', 'MarkFrames', 'RunningMark(NW)', 'MarkNW4.png'))
-MarkFrame4 = pygame.transform.scale(MarkFrame4, (50, 50))
-
-MarkFrame5 = pygame.image.load(os.path.join('Assets', 'MarkFrames', 'RunningMark(NW)', 'MarkNW5.png'))
-MarkFrame5 = pygame.transform.scale(MarkFrame5, (50, 50))
-
-MarkFrame6 = pygame.image.load(os.path.join('Assets', 'MarkFrames', 'RunningMark(NW)', 'MarkNW6.png'))
-MarkFrame6 = pygame.transform.scale(MarkFrame6, (50, 50))
-
-MarkFrame7 = pygame.image.load(os.path.join('Assets', 'MarkFrames', 'RunningMark(NW)', 'MarkNW7.png'))
-MarkFrame7 = pygame.transform.scale(MarkFrame7, (40, 40))
-
-MarkFrame8 = pygame.image.load(os.path.join('Assets', 'MarkFrames', 'RunningMark(NW)', 'MarkNW8.png'))
-MarkFrame8 = pygame.transform.scale(MarkFrame8, (40, 40))
-
-MarkAnimation = [MarkFrame1, MarkFrame2, MarkFrame3, MarkFrame4, MarkFrame5, MarkFrame6, MarkFrame7, MarkFrame8]
-#MarkAnimation = []
+MarkAnimation = []
+for i in range(8):
+    MarkAnimation.append(pygame.image.load(os.path.join('Assets', 'MarkFrames', 'RunningMark(NW)', 'MarkNW_'+str(i)+".png")))
 
 
 class Player(pygame.sprite.Sprite, miscClasses.GameObject):
@@ -57,6 +32,9 @@ class Player(pygame.sprite.Sprite, miscClasses.GameObject):
             self.coin_rects.append(coin.rect)
         miscClasses.GameObject.__init__(self, position, size, MarkTest_img)
 
+        self.anim = "running"
+        self.pre_anim = None
+        self.anim_time = 0
 
         self.grounded = False
         self.jump_g = 0.0080
@@ -168,8 +146,30 @@ class Player(pygame.sprite.Sprite, miscClasses.GameObject):
         if collision != -1 or self.position.y > 1130:
             self.dead = True
 
+        # animation time
+        if self.anim != self.pre_anim:
+            self.anim_time = 0
+        else:
+            self.anim_time += delta_time
+        self.pre_anim = self.anim
+
     def draw(self, screen, scroll, scale):
+
+        # animations
+        def running():
+            self.image = MarkAnimation[math.floor((self.anim_time % 0.64) / 0.08)]
+
+            # if self.image == MarkAnimation[0] or MarkAnimation[4]:
+            #     pygame.mixer.music.load(os.path.join('Assets', 'Sounds', 'Footsteps', 'Footstep2.mp3'))
+
+        # animate
+        if self.anim is not None:
+            anim_function = {'running': running}[self.anim]
+            anim_function()
+
         miscClasses.GameObject.draw(self, screen, scroll, scale)
+
+
 
 
 
