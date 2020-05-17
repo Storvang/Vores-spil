@@ -19,7 +19,7 @@ def make_screen(fullscreen, window_scale, monitor_dim):
 
 
 # init main loop
-pygame.mixer.music.load(os.path.join('Assets', 'Sounds', 'nokialovania.mp3'))
+pygame.mixer.music.load(os.path.join('Assets', 'Sounds', 'en for alle.mp3'))
 pygame.mixer.music.play(-1)
 
 if platform.system() == "Windows":
