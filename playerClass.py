@@ -1,21 +1,11 @@
-#
-#
-#
-#
-#       Under ombygning
-#
-#
-#
-#
-
 import pygame, math, os, glob
 import miscClasses
 
-jump_sound = pygame.mixer.Sound(os.path.join('Assets', 'Sounds', 'jumb.ogg'))
+jump_sound = pygame.mixer.Sound(os.path.join('Assets', 'Sounds', 'jump2.wav'))
 
 MarkAnimation = []
 for i in range(8):
-    MarkAnimation.append(pygame.image.load(os.path.join('Assets', 'MarkFrames', 'RunningMark(NW)', 'MarkNW_'+str(i)+".png")))
+    MarkAnimation.append(pygame.image.load(os.path.join('Assets', 'MarkFrames', 'RunningMark(NW)', 'MarkNW_' + str(i) + ".png")))
 
 
 class Player(pygame.sprite.Sprite, miscClasses.GameObject):
@@ -47,24 +37,8 @@ class Player(pygame.sprite.Sprite, miscClasses.GameObject):
         self.coin_collected = False
         self.dead = False
 
-
-
-        # self.Mark_img = pygame.Surface(self.size, pygame.SRCALPHA, 32)
-        # self.Mark_img = self.Mark_img.convert_alpha()
-        # for i in range(8):
-        #     MarkAnimation.append(os.path.join('Assets', 'MarkFrames', 'RunningMark(NW)' + str(i)))
-        #     self.Mark_img.blit, (i, 0)
-
-
-
-
-
-
     def update(self, delta_time, speed, jump_pressed):
-
-
         # jump
-
         if self.grounded:
             self.air_jumps = self.max_air_jumps
 
@@ -76,9 +50,8 @@ class Player(pygame.sprite.Sprite, miscClasses.GameObject):
         elif jump_pressed and self.air_jumps > 0:
             self.speed.y = -self.double_jump_power
             self.g = self.jump_g
+            self.channel.play(jump_sound)
             self.air_jumps -= 1
-
-
 
         # update speed/position
         pre_y = self.position.y
@@ -158,20 +131,9 @@ class Player(pygame.sprite.Sprite, miscClasses.GameObject):
         def running():
             self.image = MarkAnimation[math.floor((self.anim_time % 0.64) / 0.08)]
 
-            # if self.image == MarkAnimation[0] or MarkAnimation[4]:
-            #     pygame.mixer.music.load(os.path.join('Assets', 'Sounds', 'Footsteps', 'Footstep2.mp3'))
-
         # animate
         if self.anim is not None:
             anim_function = {'running': running}[self.anim]
             anim_function()
 
         miscClasses.GameObject.draw(self, screen, scroll, scale)
-
-
-
-
-
-       # pygame.draw.rect(screen, self.color, render_rect)
-
-
