@@ -65,10 +65,10 @@ while not quit_game:
                 space_pressed = True
 
             # pause
-            elif event.key == pygame.K_ESCAPE and GUI.scene != GUIScenes.StartMenu and GUI.transition is None:
+            elif event.key == pygame.K_ESCAPE and GUI.transition is None:
                 if isinstance(GUI.scene, GUIScenes.PauseMenu):
-                    GUI.scene = GUIScenes.Game()
-                else:
+                    GUI.scene = GUIScenes.Game(GUI.coin_count)
+                elif isinstance(GUI.scene, GUIScenes.Game):
                     GUI.scene = GUIScenes.PauseMenu(GUI.sound_on)
 
             # toggle fullscreen
