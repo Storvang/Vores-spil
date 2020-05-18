@@ -5,7 +5,7 @@ from platformClass import Platform
 
 
 class GameInstance:
-    def __init__(self, ):
+    def __init__(self, sfx):
         self.scroll = 0
         self.cam_speed = 700
 
@@ -15,12 +15,13 @@ class GameInstance:
         self.Ground = Platform(position=(0, 880), length=38, colliders=self.colliders)
         self.Ground2 = Platform(position=(1920, 700), length=60, colliders=self.colliders)
         self.Spike = miscClasses.Spike(position=(2000, 650), obstacles=self.obstacles)
-        miscClasses.Coin(position=(2200, 500), coins=self.coins)
+        miscClasses.Coin(position=(2200, 500), channel=sfx, coins=self.coins)
 
         self.Mark = Player(position=(300, -200),
                            speed=(self.cam_speed, 0),
                            size=(95, 115),
                            color=(255, 0, 242),
+                           channel=sfx,
                            colliders=self.colliders,
                            obstacles=self.obstacles,
                            coins=self.coins)

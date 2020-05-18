@@ -19,9 +19,10 @@ for i in range(8):
 
 
 class Player(pygame.sprite.Sprite, miscClasses.GameObject):
-    def __init__(self, position, speed, size, color, colliders, obstacles, coins):
+    def __init__(self, position, speed, size, color, channel, colliders, obstacles, coins):
         self.speed = pygame.Vector2(speed)
         self.color = color
+        self.channel = channel
         self.colliders = colliders
         self.obstacles = obstacles
         self.coins = coins
@@ -70,7 +71,7 @@ class Player(pygame.sprite.Sprite, miscClasses.GameObject):
         if jump_pressed and self.grounded:
             self.speed.y = -self.jump_power
             self.g = self.jump_g
-            pygame.mixer.Sound.play(jump_sound)
+            self.channel.play(jump_sound)
 
         elif jump_pressed and self.air_jumps > 0:
             self.speed.y = -self.double_jump_power

@@ -7,10 +7,11 @@ class GUI:
         self.coin_count = [0]
 
         self.sound_on = True
+        self.music_on = True
         self.fullscreen = False
         self.game_reset = False
 
-        self.scene = self.start_menu = GUIScenes.StartMenu(self.sound_on)
+        self.scene = self.start_menu = GUIScenes.StartMenu(self.sound_on, self.music_on)
         self.pre_scene = None
 
         self.transition = None
@@ -43,6 +44,9 @@ class GUI:
         def switch_sound():
             self.sound_on = not self.sound_on
 
+        def switch_music():
+            self.music_on = not self.music_on
+
         def switch_fullscreen():
             self.fullscreen = not self.fullscreen
 
@@ -55,6 +59,7 @@ class GUI:
                             'resume': resume,
                             'go_home': go_home,
                             'switch_sound': switch_sound,
+                            'switch_music': switch_music,
                             'switch_fullscreen': switch_fullscreen}[update_return]
                 function()
 
@@ -98,7 +103,7 @@ class GUI:
             elif self.transition_stage == 0:
                 self.game_reset = True
                 self.transition_stage = 1
-                self.scene = GUIScenes.StartMenu(self.sound_on)
+                self.scene = GUIScenes.StartMenu(self.sound_on, self.music_onsw)
 
             elif self.transition_stage == 1 and self.transition_time <= 1:
                 self.fade_foreground.alpha = -510 * (self.transition_time - 0.5) + 255

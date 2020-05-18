@@ -38,7 +38,7 @@ coin_sound = pygame.mixer.Sound(os.path.join('Assets', 'Sounds', 'coin.wav'))
 
 
 class Coin(GameObject):
-    def __init__(self, position, coins):
+    def __init__(self, position, channel, coins):
         size = (100, 100)
         self.coins = coins
         GameObject.__init__(self, position, size, coin_img)
@@ -46,8 +46,10 @@ class Coin(GameObject):
         self.rect = pygame.Rect(round(self.position.x), round(self.position.y), round(self.size.x), round(self.size.y))
         self.coins.append(self)
 
+        self.channel = channel
+
     def collect(self):
-        pygame.mixer.Sound.play(coin_sound)
+        self.channel.play(coin_sound)
         self.coins.remove(self)
 
 
