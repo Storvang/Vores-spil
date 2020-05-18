@@ -64,17 +64,6 @@ class Enemy:
         pass
 
 
-class Gun:
-    def __init__(self):
-        pass
-
-    def update(self, position, shoot_pressed):
-        pass
-
-    def draw(self, screen, scroll, scale):
-        pass
-
-
 class Projectile:
     def __init__(self, position, rotation):
         pass

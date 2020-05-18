@@ -19,8 +19,8 @@ class GameInstance:
 
         self.Mark = Player(position=(300, -200),
                            speed=(self.cam_speed, 0),
-                           size=(95, 115),
-                           color=(255, 0, 242),
+                           size=(83, 111),
+                           gun='shotgun',
                            channel=sfx,
                            colliders=self.colliders,
                            obstacles=self.obstacles,

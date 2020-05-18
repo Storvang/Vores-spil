@@ -1,17 +1,16 @@
 import pygame, math, os, glob
-import miscClasses
+import miscClasses, Guns
 
 jump_sound = pygame.mixer.Sound(os.path.join('Assets', 'Sounds', 'jump2.wav'))
 
 MarkAnimation = []
 for i in range(8):
-    MarkAnimation.append(pygame.image.load(os.path.join('Assets', 'MarkFrames', 'RunningMark(NW)', 'MarkNW_' + str(i) + ".png")))
+    MarkAnimation.append(pygame.image.load(os.path.join('Assets', 'MarkFrames', 'Running', 'Mark Body Running' + str(i) + ".png")))
 
 
 class Player(pygame.sprite.Sprite, miscClasses.GameObject):
-    def __init__(self, position, speed, size, color, channel, colliders, obstacles, coins):
+    def __init__(self, position, speed, size, gun, channel, colliders, obstacles, coins):
         self.speed = pygame.Vector2(speed)
-        self.color = color
         self.channel = channel
         self.colliders = colliders
         self.obstacles = obstacles
@@ -36,6 +35,10 @@ class Player(pygame.sprite.Sprite, miscClasses.GameObject):
 
         self.coin_collected = False
         self.dead = False
+
+        gun_type = {'shotgun': Guns.Shotgun}[gun]
+        self.gun = gun_type(self.position)
+
 
     def update(self, delta_time, speed, jump_pressed):
         # jump
@@ -118,6 +121,9 @@ class Player(pygame.sprite.Sprite, miscClasses.GameObject):
         if collision != -1 or self.position.y > 1130:
             self.dead = True
 
+        # gun
+        self.gun.update(self.position, self.anim, False, delta_time)
+
         # animation time
         if self.anim != self.pre_anim:
             self.anim_time = 0
@@ -136,4 +142,6 @@ class Player(pygame.sprite.Sprite, miscClasses.GameObject):
             anim_function = {'running': running}[self.anim]
             anim_function()
 
+        # render player and gun
         miscClasses.GameObject.draw(self, screen, scroll, scale)
+        self.gun.draw(screen, scroll, scale)
