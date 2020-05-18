@@ -103,7 +103,7 @@ class GUI:
             elif self.transition_stage == 0:
                 self.game_reset = True
                 self.transition_stage = 1
-                self.scene = GUIScenes.StartMenu(self.sound_on, self.music_onsw)
+                self.scene = GUIScenes.StartMenu(self.sound_on, self.music_on)
 
             elif self.transition_stage == 1 and self.transition_time <= 1:
                 self.fade_foreground.alpha = -510 * (self.transition_time - 0.5) + 255

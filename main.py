@@ -71,7 +71,7 @@ while not quit_game:
             # pause
             elif event.key == pygame.K_ESCAPE and GUI.transition is None:
                 if isinstance(GUI.scene, GUIScenes.PauseMenu):
-                    GUI.scene = GUIScenes.Game(coin_count)
+                    GUI.scene = GUIScenes.Game(GUI.coin_count)
                 elif isinstance(GUI.scene, GUIScenes.Game):
                     GUI.scene = GUIScenes.PauseMenu(GUI.sound_on, GUI.music_on)
 
