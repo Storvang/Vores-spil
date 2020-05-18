@@ -28,6 +28,12 @@ load_button_imgs(sound_on_button_imgs, 'Sound Button_on', os.path.join('Assets',
 sound_off_button_imgs = []
 load_button_imgs(sound_off_button_imgs, 'Sound Button_off', os.path.join('Assets', 'UI', 'Sound Button off and on'))
 
+music_on_button_imgs = []
+load_button_imgs(music_on_button_imgs, 'Music button on', os.path.join('Assets', 'UI', 'Music button on and off'))
+
+music_off_button_imgs = []
+load_button_imgs(music_off_button_imgs, 'Music button off', os.path.join('Assets', 'UI', 'Music button on and off'))
+
 coin_img = pygame.image.load(os.path.join('Assets', 'Dogecoin.png'))
 pause_title_img = pygame.image.load(os.path.join('Assets', 'UI', 'Paused Title.png'))
 death_title_img = pygame.image.load(os.path.join('Assets', 'UI', 'Death Title.png'))
@@ -59,14 +65,19 @@ class Game(GUIScene):
 
 
 class StartMenu(GUIScene):
-    def __init__(self, sound_on):
+    def __init__(self, sound_on, music_on):
         sound_button_imgs = sound_on_button_imgs if sound_on else sound_off_button_imgs
         self.sound_on = sound_on
+
+        music_button_imgs = music_on_button_imgs if music_on else music_off_button_imgs
+        self.music_on = music_on
+
         GUIScene.__init__(self)
 
         self.play_button = GUIElementClasses.Button((773, 478), (250, 125), play_button_imgs, self.GUIElements)
         self.fullscreen_button = GUIElementClasses.Button((1050, 478), (113, 125), flscrn_button_imgs, self.GUIElements)
         self.sound_button = GUIElementClasses.Button((1757, 905), (113, 125), sound_button_imgs, self.GUIElements)
+        self.music_button = GUIElementClasses.Button((1594, 905), (113, 125), music_button_imgs, self.GUIElements)
 
     def update(self, mouse_pos, mouse_down, delta_time):
 
@@ -81,11 +92,19 @@ class StartMenu(GUIScene):
             self.sound_button.images = sound_on_button_imgs if self.sound_on else sound_off_button_imgs
             return 'switch_sound'
 
+        elif self.music_button.update(mouse_pos, mouse_down, delta_time):
+            self.music_on = not self.music_on
+            self.music_button.images = music_on_button_imgs if self.music_on else music_off_button_imgs
+            return 'switch_music'
+
 
 class PauseMenu(GUIScene):
-    def __init__(self, sound_on):
+    def __init__(self, sound_on, music_on):
         sound_button_imgs = sound_on_button_imgs if sound_on else sound_off_button_imgs
         self.sound_on = sound_on
+
+        music_button_imgs = music_on_button_imgs if music_on else music_off_button_imgs
+        self.music_on = music_on
         GUIScene.__init__(self)
 
         # den mørke baggrund
@@ -98,6 +117,15 @@ class PauseMenu(GUIScene):
         self.replay_button = GUIElementClasses.Button((650, 541), (113, 125), replay_button_imgs, self.GUIElements)
         self.home_button = GUIElementClasses.Button((1157, 541), (113, 125), home_button_imgs, self.GUIElements)
         self.sound_button = GUIElementClasses.Button((1757, 905), (113, 125), sound_button_imgs, self.GUIElements)
+        self.music_button = GUIElementClasses.Button((1594, 905), (113, 125), music_button_imgs, self.GUIElements)
+
+
+
+
+
+
+
+
 
     def update(self, mouse_pos, mouse_down, delta_time):
 
@@ -114,6 +142,11 @@ class PauseMenu(GUIScene):
             self.sound_on = not self.sound_on
             self.sound_button.images = sound_on_button_imgs if self.sound_on else sound_off_button_imgs
             return 'switch_sound'
+
+        elif self.music_button.update(mouse_pos, mouse_down, delta_time):
+            self.music_on = not self.music_on
+            self.music_button.images = music_on_button_imgs if self.music_on else music_off_button_imgs
+            return 'switch_music'
 
 
 class DeathMenu(GUIScene):

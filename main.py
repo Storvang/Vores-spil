@@ -25,7 +25,11 @@ pygame.mixer.music.play(-1)
 if platform.system() == "Windows":
     ctypes.windll.user32.SetProcessDPIAware()   # ignorer Windows skærm-skalering
 
+sfx = pygame.mixer.Channel(1)
+
+
 sound_on = True
+music_on = True
 fullscreen = False
 window_scale = 0.7  # bliver kun brugt hvis fullscreen er deaktiveret
 monitor_dim = (pygame.display.Info().current_w, pygame.display.Info().current_h)
@@ -46,7 +50,7 @@ coin_count = 0
 quit_game = False
 
 GUI = GUIClass.GUI()
-GameInstance = GameInstanceClass.GameInstance()
+GameInstance = GameInstanceClass.GameInstance(sfx)
 
 # main loop
 while not quit_game:
@@ -69,7 +73,7 @@ while not quit_game:
                 if isinstance(GUI.scene, GUIScenes.PauseMenu):
                     GUI.scene = GUIScenes.Game()
                 else:
-                    GUI.scene = GUIScenes.PauseMenu(GUI.sound_on)
+                    GUI.scene = GUIScenes.PauseMenu(GUI.sound_on, GUI.music_on)
 
             # toggle fullscreen
             elif event.key == pygame.K_TAB:
@@ -84,7 +88,7 @@ while not quit_game:
 
     # init new game
     if GUI.game_reset:
-        GameInstance = GameInstanceClass.GameInstance()
+        GameInstance = GameInstanceClass.GameInstance(sfx)
         GUI.game_reset = False
 
     # update
@@ -92,12 +96,19 @@ while not quit_game:
         fullscreen = GUI.fullscreen
         screen, screen_scale = make_screen(fullscreen, window_scale, monitor_dim)
 
-    if GUI.sound_on != sound_on:
-        sound_on = GUI.sound_on
-        if sound_on:
+    if GUI.music_on != music_on:
+        music_on = GUI.music_on
+        if music_on:
             pygame.mixer.music.unpause()
         else:
             pygame.mixer.music.pause()
+
+    if GUI.sound_on != sound_on:
+        sound_on = GUI.sound_on
+        if sound_on:
+            sfx.set_volume(100)
+        else:
+            sfx.set_volume(0)
 
     if isinstance(GUI.scene, GUIScenes.Game):   # Tjek at man ikke er på en menu
         coin_collected, dead = GameInstance.update(delta_time, space_pressed)
