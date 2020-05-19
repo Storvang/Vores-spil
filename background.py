@@ -23,7 +23,7 @@ import random
         render_img = pygame.transform.scale(self.image, render_rect.size)
         screen.blit(render_img, render_rect.topleft)
 
-class Cloud_(GameObject):
+class Cloud(GameObject):
     def __init__(self, position):
         self.number = random.randint(1,4)
         if self.number==1:
