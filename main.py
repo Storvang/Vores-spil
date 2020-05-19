@@ -1,3 +1,4 @@
+# burh moment
 import pygame, time, os, ctypes, platform
 
 # Vores egne
