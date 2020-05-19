@@ -26,7 +26,7 @@ class GameInstance:
                            channel=sfx,
                            colliders=self.colliders,
                            obstacles=self.obstacles,
-                           coins=self.coins,
+                           coins=self.coins)
 
 
 
