@@ -2,13 +2,14 @@ import pygame
 import miscClasses
 from playerClass import Player
 from platformClass import Platform
-
+import background
 
 class GameInstance:
     def __init__(self, sfx):
         self.scroll = 0
         self.cam_speed = 700
 
+        self.clouds = []
         self.colliders = []
         self.obstacles = []
         self.coins = []
@@ -17,6 +18,7 @@ class GameInstance:
         self.Ground2 = Platform(position=(1920, 700), length=60, colliders=self.colliders)
         self.Spike = miscClasses.Spike(position=(2000, 650), obstacles=self.obstacles)
         miscClasses.Coin(position=(2200, 500), channel=sfx, coins=self.coins)
+        background.Cloud(position=(2200, 700), Clouds=self.Clouds)
 
         self.Mark = Player(position=(300, -200),
                            speed=(self.cam_speed, 0),
@@ -45,4 +47,6 @@ class GameInstance:
             coin.draw(screen, self.scroll, screen_scale)
         for projectile in self.projectiles:
             projectile.draw(screen, self.scroll, screen_scale)
+        for cloud in self.clouds:
+            cloud.draw(screen, self.scroll, screen_scale)
         self.Mark.draw(screen, self.scroll, screen_scale)
