@@ -57,8 +57,11 @@ while not quit_game:
 
     # input
     space_pressed = False
+    mouse_pressed = False
 
     for event in pygame.event.get():
+        mouse_pressed = event.type == pygame.MOUSEBUTTONDOWN
+
         if event.type == pygame.QUIT:
             quit_game = True
 
@@ -111,7 +114,7 @@ while not quit_game:
             sfx.set_volume(0)
 
     if isinstance(GUI.scene, GUIScenes.Game):   # Tjek at man ikke er på en menu
-        coin_collected, dead = GameInstance.update(delta_time, space_pressed)
+        coin_collected, dead = GameInstance.update(delta_time, space_pressed, mouse_pressed)
         if coin_collected:
             coin_count += 1
         if dead:
@@ -140,6 +143,8 @@ while not quit_game:
     elif delta_time > max_delta_time:
         delta_time = max_delta_time
         FPS_low = True
+
+    # delta_time = delta_time * 0.25
 
     # print(1 / delta_time)
 # oh yeah yeah

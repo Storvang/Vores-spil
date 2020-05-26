@@ -9,16 +9,18 @@ for i in range(8):
 
 
 class Player(pygame.sprite.Sprite, miscClasses.GameObject):
-    def __init__(self, position, speed, size, gun, channel, colliders, obstacles, coins):
+    def __init__(self, position, speed, size, gun, channel, colliders, obstacles, coins, projectiles):
         self.speed = pygame.Vector2(speed)
         self.channel = channel
         self.colliders = colliders
         self.obstacles = obstacles
         self.coins = coins
+        self.projectiles = projectiles
         self.coin_rects = []
         for coin in coins:
             self.coin_rects.append(coin.rect)
-        miscClasses.GameObject.__init__(self, position, size, MarkAnimation[1])
+
+        miscClasses.GameObject.__init__(self, position, size, MarkAnimation[0])
 
         self.anim = "running"
         self.pre_anim = None
@@ -37,10 +39,9 @@ class Player(pygame.sprite.Sprite, miscClasses.GameObject):
         self.dead = False
 
         gun_type = {'shotgun': Guns.Shotgun}[gun]
-        self.gun = gun_type(self.position)
+        self.gun = gun_type(self.position, self.channel, self.colliders)
 
-
-    def update(self, delta_time, speed, jump_pressed):
+    def update(self, delta_time, speed, jump_pressed, shoot_pressed):
         # jump
         if self.grounded:
             self.air_jumps = self.max_air_jumps
@@ -122,7 +123,7 @@ class Player(pygame.sprite.Sprite, miscClasses.GameObject):
             self.dead = True
 
         # gun
-        self.gun.update(self.position, self.anim, False, delta_time)
+        self.gun.update(self.position, self.anim, self.anim_time, shoot_pressed, self.projectiles, delta_time)
 
         # animation time
         if self.anim != self.pre_anim:

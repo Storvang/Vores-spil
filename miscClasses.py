@@ -1,19 +1,22 @@
-import pygame, os
+import pygame, os, math
 
 
 class GameObject:
-    def __init__(self, position, size, image):
+    def __init__(self, position, size, image, direction=0):
         self.position = pygame.Vector2(position)
         self.size = pygame.Vector2(size)
         self.image = image
 
+        self.direction = direction
+
     def draw(self, screen, scroll, scale):
-        render_rect = pygame.Rect(round((self.position.x - scroll) * scale),
+        render_rect = pygame.Rect(round((self.position.x + - scroll) * scale),
                                   round(self.position.y * scale),
                                   round(self.size.x * scale),
                                   round(self.size.y * scale))
 
         render_img = pygame.transform.scale(self.image, render_rect.size)
+        render_img = pygame.transform.rotate(render_img, self.direction)
         screen.blit(render_img, render_rect.topleft)
 
 
@@ -55,17 +58,6 @@ class Coin(GameObject):
 
 class Enemy:
     def __init__(self, position):
-        pass
-
-    def update(self, delta_time):
-        pass
-
-    def draw(self, screen, scroll, scale):
-        pass
-
-
-class Projectile:
-    def __init__(self, position, rotation):
         pass
 
     def update(self, delta_time):

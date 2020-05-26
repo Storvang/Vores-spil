@@ -12,6 +12,7 @@ class GameInstance:
         self.colliders = []
         self.obstacles = []
         self.coins = []
+        self.projectiles = []
         self.Ground = Platform(position=(0, 880), length=38, colliders=self.colliders)
         self.Ground2 = Platform(position=(1920, 700), length=60, colliders=self.colliders)
         self.Spike = miscClasses.Spike(position=(2000, 650), obstacles=self.obstacles)
@@ -24,12 +25,15 @@ class GameInstance:
                            channel=sfx,
                            colliders=self.colliders,
                            obstacles=self.obstacles,
-                           coins=self.coins)
+                           coins=self.coins,
+                           projectiles=self.projectiles)
 
-    def update(self, delta_time, space_pressed):
+    def update(self, delta_time, jump_pressed, shoot_pressed):
         self.scroll += self.cam_speed * delta_time
 
-        self.Mark.update(delta_time, self.cam_speed, space_pressed)
+        for projectile in self.projectiles:
+            projectile.update(delta_time)
+        self.Mark.update(delta_time, self.cam_speed, jump_pressed, shoot_pressed)
         return self.Mark.coin_collected, self.Mark.dead
 
     def draw(self, screen, screen_scale):
@@ -39,4 +43,6 @@ class GameInstance:
         self.Spike.draw(screen, self.scroll, screen_scale)
         for coin in self.coins:
             coin.draw(screen, self.scroll, screen_scale)
+        for projectile in self.projectiles:
+            projectile.draw(screen, self.scroll, screen_scale)
         self.Mark.draw(screen, self.scroll, screen_scale)
