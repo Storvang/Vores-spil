@@ -18,7 +18,7 @@ class GameInstance:
         self.Ground2 = Platform(position=(1920, 700), length=60, colliders=self.colliders)
         self.Spike = miscClasses.Spike(position=(2000, 650), obstacles=self.obstacles)
         miscClasses.Coin(position=(2200, 500), channel=sfx, coins=self.coins)
-        background.Cloud(position=(2200, 700), Clouds=self.Clouds)
+        background.Cloud(position=(2200, 700), Clouds=self.clouds)
 
         self.Mark = Player(position=(300, -200),
                            speed=(self.cam_speed, 0),
