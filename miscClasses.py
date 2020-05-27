@@ -51,8 +51,9 @@ class Coin(GameObject):
 
         self.channel = channel
 
-    def collect(self):
-        self.channel.play(coin_sound)
+    def collect(self, sound_on):
+        if sound_on:
+            coin_sound.play()
         self.coins.remove(self)
 
 

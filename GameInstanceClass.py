@@ -30,13 +30,14 @@ class GameInstance:
                            coins=self.coins,
                            projectiles=self.projectiles)
 
-    def update(self, delta_time, jump_pressed, shoot_pressed):
+    def update(self, delta_time, jump_pressed, shoot_pressed, sound_on):
         self.scroll += self.cam_speed * delta_time
 
         for projectile in self.projectiles:
             projectile.update(delta_time)
-        self.Mark.update(delta_time, self.cam_speed, jump_pressed, shoot_pressed)
+        self.Mark.update(delta_time, self.cam_speed, jump_pressed, shoot_pressed, sound_on)
         return self.Mark.coin_collected, self.Mark.dead
+
 
     def draw(self, screen, screen_scale):
         screen.fill((74, 228, 255))

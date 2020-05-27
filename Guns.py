@@ -25,7 +25,7 @@ class Gun(miscClasses.GameObject):
         self.anim_time = 0
         self.anim_duration = 0.05 * len(self.animations.shooting)
 
-    def shoot(self, projectile_list):
+    def shoot(self, projectile_list, sound_on):
         projectileClass.Projectile(position=self.position + pygame.Vector2(159, 10),
                                    direction=0,
                                    speed=3500,
@@ -33,14 +33,14 @@ class Gun(miscClasses.GameObject):
                                    projectiles=projectile_list,
                                    colliders=self.colliders)
 
-    def update(self, player_position, player_animation, player_anim_time, shoot_pressed, projectile_list, delta_time):
+    def update(self, player_position, player_animation, player_anim_time, shoot_pressed, projectile_list, sound_on, delta_time):
         self.position = player_position + self.socket_offset
 
         if shoot_pressed and not self.shooting:
             self.shooting = True
             self.anim = 'shooting'
             self.current_cool_down = self.cool_down
-            self.shoot(projectile_list)
+            self.shoot(projectile_list, sound_on)
 
         elif self.shooting:
             if self.current_cool_down <= 0:
@@ -99,8 +99,9 @@ class Shotgun(Gun):
         Gun.__init__(self, player_position, (159, 44), shotgun_animations, 0.5, (-12, 32), colliders)
         self.channel = channel
 
-    def shoot(self, projectile_list):
-        shotgun_shot_sfx.play()
+    def shoot(self, projectile_list, sound_on):
+        if sound_on:
+            shotgun_shot_sfx.play()
 
         for _ in range(7):
             projectileClass.Projectile(position=self.position + pygame.Vector2(159, 10),

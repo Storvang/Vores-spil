@@ -41,7 +41,7 @@ class Player(pygame.sprite.Sprite, miscClasses.GameObject):
         gun_type = {'shotgun': Guns.Shotgun}[gun]
         self.gun = gun_type(self.position, self.channel, self.colliders)
 
-    def update(self, delta_time, speed, jump_pressed, shoot_pressed):
+    def update(self, delta_time, speed, jump_pressed, shoot_pressed, sound_on):
         # jump
         if self.grounded:
             self.air_jumps = self.max_air_jumps
@@ -49,12 +49,15 @@ class Player(pygame.sprite.Sprite, miscClasses.GameObject):
         if jump_pressed and self.grounded:
             self.speed.y = -self.jump_power
             self.g = self.jump_g
-            self.channel.play(jump_sound)
+            if sound_on:
+                jump_sound.play()
+
 
         elif jump_pressed and self.air_jumps > 0:
             self.speed.y = -self.double_jump_power
             self.g = self.jump_g
-            self.channel.play(jump_sound)
+            if sound_on:
+                jump_sound.play()
             self.air_jumps -= 1
 
         # update speed/position
@@ -113,7 +116,7 @@ class Player(pygame.sprite.Sprite, miscClasses.GameObject):
             del self.coin_rects[collision]
 
             collided_coin = self.coins[collision]
-            collided_coin.collect()
+            collided_coin.collect(sound_on)
         else:
             self.coin_collected = False
 
@@ -123,7 +126,7 @@ class Player(pygame.sprite.Sprite, miscClasses.GameObject):
             self.dead = True
 
         # gun
-        self.gun.update(self.position, self.anim, self.anim_time, shoot_pressed, self.projectiles, delta_time)
+        self.gun.update(self.position, self.anim, self.anim_time, shoot_pressed, self.projectiles, sound_on, delta_time)
 
         # animation time
         if self.anim != self.pre_anim:

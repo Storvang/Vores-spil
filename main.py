@@ -108,13 +108,10 @@ while not quit_game:
 
     if GUI.sound_on != sound_on:
         sound_on = GUI.sound_on
-        if sound_on:
-            sfx.set_volume(100)
-        else:
-            sfx.set_volume(0)
+
 
     if isinstance(GUI.scene, GUIScenes.Game):   # Tjek at man ikke er på en menu
-        coin_collected, dead = GameInstance.update(delta_time, space_pressed, mouse_pressed)
+        coin_collected, dead = GameInstance.update(delta_time, space_pressed, mouse_pressed, sound_on)
         if coin_collected:
             coin_count += 1
         if dead:
