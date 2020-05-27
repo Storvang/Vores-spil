@@ -3,10 +3,15 @@ import miscClasses
 from playerClass import Player
 from platformClass import Platform
 import background
+import random
 from background import Cloud
 
+
 class GameInstance:
+
     def __init__(self, sfx):
+        y = random.randint(-100, 100)
+        x = random.randint(0, 2500)
         self.scroll = 0
         self.cam_speed = 700
 
@@ -19,7 +24,7 @@ class GameInstance:
         self.Ground2 = Platform(position=(1920, 700), length=60, colliders=self.colliders)
         self.Spike = miscClasses.Spike(position=(2000, 650), obstacles=self.obstacles)
         miscClasses.Coin(position=(2200, 400), channel=sfx, coins=self.coins)
-        background.Cloud(position=(2500, -100), Clouds=self.clouds)
+        background.Cloud(position=(x, y), Clouds=self.clouds)
 
         self.Mark = Player(position=(300, -200),
                            speed=(self.cam_speed, 0),
