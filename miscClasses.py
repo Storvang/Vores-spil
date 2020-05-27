@@ -10,7 +10,7 @@ class GameObject:
         self.direction = direction
 
     def draw(self, screen, scroll, scale):
-        render_rect = pygame.Rect(round((self.position.x + - scroll) * scale),
+        render_rect = pygame.Rect(round((self.position.x - scroll) * scale),
                                   round(self.position.y * scale),
                                   round(self.size.x * scale),
                                   round(self.size.y * scale))

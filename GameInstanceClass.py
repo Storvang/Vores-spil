@@ -3,6 +3,7 @@ import miscClasses
 from playerClass import Player
 from platformClass import Platform
 import background
+from background import Cloud
 
 class GameInstance:
     def __init__(self, sfx):
@@ -17,8 +18,8 @@ class GameInstance:
         self.Ground = Platform(position=(0, 880), length=38, colliders=self.colliders)
         self.Ground2 = Platform(position=(1920, 700), length=60, colliders=self.colliders)
         self.Spike = miscClasses.Spike(position=(2000, 650), obstacles=self.obstacles)
-        miscClasses.Coin(position=(2200, 500), channel=sfx, coins=self.coins)
-        background.Cloud(position=(2200, 700), Clouds=self.clouds)
+        miscClasses.Coin(position=(2200, 400), channel=sfx, coins=self.coins)
+        background.Cloud(position=(2500, -100), Clouds=self.clouds)
 
         self.Mark = Player(position=(300, -200),
                            speed=(self.cam_speed, 0),
@@ -41,6 +42,8 @@ class GameInstance:
 
     def draw(self, screen, screen_scale):
         screen.fill((74, 228, 255))
+        for cloud in self.clouds:
+            cloud.draw(screen, self.scroll, screen_scale)
         self.Ground.draw(screen, self.scroll, screen_scale)
         self.Ground2.draw(screen, self.scroll, screen_scale)
         self.Spike.draw(screen, self.scroll, screen_scale)
@@ -48,6 +51,4 @@ class GameInstance:
             coin.draw(screen, self.scroll, screen_scale)
         for projectile in self.projectiles:
             projectile.draw(screen, self.scroll, screen_scale)
-        for cloud in self.clouds:
-            cloud.draw(screen, self.scroll, screen_scale)
         self.Mark.draw(screen, self.scroll, screen_scale)
