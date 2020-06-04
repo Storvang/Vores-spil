@@ -143,6 +143,6 @@ while not quit_game:
 
     # delta_time = delta_time * 0.25
 
-    with open('performance log.txt', 'a') as performance_log:
-        performance_log.write('\n' + str(delta_time))
+    # with open('performance log.txt', 'a') as performance_log:
+    #     performance_log.write('\n' + str(delta_time))
 # oh yeah yeah
