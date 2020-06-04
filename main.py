@@ -5,8 +5,8 @@ pygame.mixer.pre_init(22050, -16, 2, 512)
 pygame.init()
 pygame.mixer.init()
 
-import GUIClass, GUIScenes, GameInstanceClass   # Mixeren bliver nødt til at blive inittet før der kan indlæses lydfiler
-
+# Mixeren bliver nødt til at blive inittet før der kan indlæses lydfiler
+import GUIClass, GUIScenes, GameInstanceClass, stageGeneration
 
 def make_screen(fullscreen, window_scale, monitor_dim):
     if fullscreen:
@@ -39,7 +39,7 @@ icon_img = pygame.image.load(os.path.join('Assets', 'icon.png'))
 pygame.display.set_icon(icon_img)
 pygame.display.set_caption('Vores spil der bare sparker røv')
 
-min_delta_time = 0.003
+min_delta_time = 0.017
 max_delta_time = 0.066
 delta_time = 0
 pre_time = pygame.time.get_ticks() / 1000
@@ -50,7 +50,8 @@ coin_count = 0
 quit_game = False
 
 GUI = GUIClass.GUI()
-GameInstance = GameInstanceClass.GameInstance(sfx)
+GameInstance = GameInstanceClass.GameInstance()
+
 
 # main loop
 while not quit_game:
@@ -91,7 +92,7 @@ while not quit_game:
 
     # init new game
     if GUI.game_reset:
-        GameInstance = GameInstanceClass.GameInstance(sfx)
+        GameInstance = GameInstanceClass.GameInstance()
         GUI.game_reset = False
 
     # update
@@ -108,7 +109,6 @@ while not quit_game:
 
     if GUI.sound_on != sound_on:
         sound_on = GUI.sound_on
-
 
     if isinstance(GUI.scene, GUIScenes.Game):   # Tjek at man ikke er på en menu
         coin_collected, dead = GameInstance.update(delta_time, space_pressed, mouse_pressed, sound_on)
@@ -143,5 +143,6 @@ while not quit_game:
 
     # delta_time = delta_time * 0.25
 
-    # print(1 / delta_time)
+    with open('performance log.txt', 'a') as performance_log:
+        performance_log.write('\n' + str(delta_time))
 # oh yeah yeah

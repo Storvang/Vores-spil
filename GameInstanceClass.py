@@ -1,59 +1,64 @@
-import pygame
+import random
 import miscClasses
 from playerClass import Player
 from platformClass import Platform
 import background
-import random
-from background import Cloud
+import stageGeneration
 
 
 class GameInstance:
 
-    def __init__(self, sfx):
-        y = random.randint(-100, 100)
-        x = random.randint(0, 2500)
+    def __init__(self):
         self.scroll = 0
         self.cam_speed = 700
 
         self.clouds = []
-        self.colliders = []
-        self.obstacles = []
-        self.coins = []
+        # self.platforms = []
+        # self.spikes = []
+        # self.coins = []
         self.projectiles = []
-        self.Ground = Platform(position=(0, 880), length=38, colliders=self.colliders)
-        self.Ground2 = Platform(position=(1920, 700), length=60, colliders=self.colliders)
-        self.Spike = miscClasses.Spike(position=(2000, 650), obstacles=self.obstacles)
-        miscClasses.Coin(position=(2200, 400), channel=sfx, coins=self.coins)
-        background.Cloud(position=(x, y), Clouds=self.clouds)
+
+        self.stage = stageGeneration.Stage()
+
+        y = random.randint(-100, 100)
+        x = random.randint(0, 2500)
+        background.Cloud(position=(x, y), clouds=self.clouds)
 
         self.Mark = Player(position=(300, -200),
                            speed=(self.cam_speed, 0),
                            size=(83, 111),
                            gun='shotgun',
-                           channel=sfx,
-                           colliders=self.colliders,
-                           obstacles=self.obstacles,
-                           coins=self.coins,
+                           platforms=self.stage.platforms,
+                           spikes=self.stage.spikes,
+                           coins=self.stage.coins,
                            projectiles=self.projectiles)
 
     def update(self, delta_time, jump_pressed, shoot_pressed, sound_on):
         self.scroll += self.cam_speed * delta_time
+
+        self.stage.update(self.scroll)
 
         for projectile in self.projectiles:
             projectile.update(delta_time)
         self.Mark.update(delta_time, self.cam_speed, jump_pressed, shoot_pressed, sound_on)
         return self.Mark.coin_collected, self.Mark.dead
 
-
     def draw(self, screen, screen_scale):
         screen.fill((74, 228, 255))
+
         for cloud in self.clouds:
             cloud.draw(screen, self.scroll, screen_scale)
-        self.Ground.draw(screen, self.scroll, screen_scale)
-        self.Ground2.draw(screen, self.scroll, screen_scale)
-        self.Spike.draw(screen, self.scroll, screen_scale)
-        for coin in self.coins:
+
+        for platform in self.stage.platforms:
+            platform.draw(screen, self.scroll, screen_scale)
+
+        for spike in self.stage.spikes:
+            spike.draw(screen, self.scroll, screen_scale)
+
+        for coin in self.stage.coins:
             coin.draw(screen, self.scroll, screen_scale)
+
         for projectile in self.projectiles:
             projectile.draw(screen, self.scroll, screen_scale)
+
         self.Mark.draw(screen, self.scroll, screen_scale)

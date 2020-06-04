@@ -12,7 +12,7 @@ platform_right_img = pygame.transform.scale(platform_right_img, (50, 50))
 
 
 class Platform(miscClasses.GameObject):
-    def __init__(self, position, length, colliders):
+    def __init__(self, position, length, platforms):
         size = pygame.Vector2(length * 50, 50)
 
         # construct platform image
@@ -26,8 +26,5 @@ class Platform(miscClasses.GameObject):
         miscClasses.GameObject.__init__(self, position, size, image)
         self.rect = pygame.Rect(round(self.position.x), round(self.position.y), round(self.size.x), round(self.size.y))
 
-        self.colliders = colliders
-        self.colliders.append(self.rect)
-
-    def __del__(self):
-        self.colliders.remove(self.rect)
+        self.platforms = platforms
+        self.platforms.append(self)

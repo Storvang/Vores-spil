@@ -24,16 +24,13 @@ spike_img = pygame.image.load(os.path.join('Assets', 'Spike.png'))
 
 
 class Spike(GameObject):
-    def __init__(self, position, obstacles):
+    def __init__(self, position, spikes):
         size = (50, 50)
-        self.obstacles = obstacles
+        self.spikes = spikes
         GameObject.__init__(self, position, size, spike_img)
 
         self.rect = pygame.Rect(round(self.position.x), round(self.position.y), round(self.size.x), round(self.size.y))
-        self.obstacles.append(self.rect)
-
-    def __del__(self):
-        self.obstacles.remove(self.rect)
+        self.spikes.append(self)
 
 
 coin_img = pygame.image.load(os.path.join('Assets', 'Dogecoin.png'))
@@ -41,20 +38,20 @@ coin_sound = pygame.mixer.Sound(os.path.join('Assets', 'Sounds', 'coin.wav'))
 
 
 class Coin(GameObject):
-    def __init__(self, position, channel, coins):
+    def __init__(self, position, coins, global_coins):
         size = (100, 100)
         self.coins = coins
+        self.global_coins = global_coins
         GameObject.__init__(self, position, size, coin_img)
 
         self.rect = pygame.Rect(round(self.position.x), round(self.position.y), round(self.size.x), round(self.size.y))
         self.coins.append(self)
 
-        self.channel = channel
-
     def collect(self, sound_on):
         if sound_on:
             coin_sound.play()
         self.coins.remove(self)
+        self.global_coins.remove(self)
 
 
 class Enemy:

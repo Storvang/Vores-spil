@@ -9,16 +9,12 @@ for i in range(8):
 
 
 class Player(pygame.sprite.Sprite, miscClasses.GameObject):
-    def __init__(self, position, speed, size, gun, channel, colliders, obstacles, coins, projectiles):
+    def __init__(self, position, speed, size, gun, platforms, spikes, coins, projectiles):
         self.speed = pygame.Vector2(speed)
-        self.channel = channel
-        self.colliders = colliders
-        self.obstacles = obstacles
-        self.coins = coins
         self.projectiles = projectiles
-        self.coin_rects = []
-        for coin in coins:
-            self.coin_rects.append(coin.rect)
+        self.platforms = platforms
+        self.spikes = spikes
+        self.coins = coins
 
         miscClasses.GameObject.__init__(self, position, size, MarkAnimation[0])
 
@@ -39,7 +35,7 @@ class Player(pygame.sprite.Sprite, miscClasses.GameObject):
         self.dead = False
 
         gun_type = {'shotgun': Guns.Shotgun}[gun]
-        self.gun = gun_type(self.position, self.channel, self.colliders)
+        self.gun = gun_type(self.position, self.platforms)
 
     def update(self, delta_time, speed, jump_pressed, shoot_pressed, sound_on):
         # jump
@@ -51,7 +47,6 @@ class Player(pygame.sprite.Sprite, miscClasses.GameObject):
             self.g = self.jump_g
             if sound_on:
                 jump_sound.play()
-
 
         elif jump_pressed and self.air_jumps > 0:
             self.speed.y = -self.double_jump_power
@@ -71,6 +66,10 @@ class Player(pygame.sprite.Sprite, miscClasses.GameObject):
         self.speed.y += self.g/2 * delta_time * speed
 
         # collisions
+        colliders = []
+        for platform in self.platforms:
+            colliders.append(platform.rect)
+
         if self.speed.y > 0:
             self.g = self.fall_g
 
@@ -80,10 +79,10 @@ class Player(pygame.sprite.Sprite, miscClasses.GameObject):
                                         math.ceil(self.size.y),
                                         math.ceil((self.position.y + self.size.y) - (pre_y + self.size.y)))
 
-            collision = foot_collider.collidelist(self.colliders)   # Collision er -1 hvis der ikke er nogen kollisioner
-            was_over = pre_y + self.size.y <= self.colliders[collision].top
+            collision = foot_collider.collidelist(colliders)   # Collision er -1 hvis der ikke er nogen kollisioner
+            was_over = pre_y + self.size.y <= colliders[collision].top
             if collision != -1 and was_over:
-                self.position.y = self.colliders[collision].top - self.size.y
+                self.position.y = colliders[collision].top - self.size.y
                 self.speed.y = 0
                 self.grounded = True
             else:
@@ -98,22 +97,26 @@ class Player(pygame.sprite.Sprite, miscClasses.GameObject):
                                         math.ceil(self.size.y),
                                         math.ceil(self.position.y - pre_y))
 
-            collision = head_collider.collidelist(self.colliders)   # Collision er -1 hvis der ikke er nogen kollisioner
-            was_under = pre_y >= self.colliders[collision].top
+            collision = head_collider.collidelist(colliders)   # Collision er -1 hvis der ikke er nogen kollisioner
+            was_under = pre_y >= colliders[collision].top
             if collision != -1 and was_under:
-                self.position.y = self.colliders[collision].bottom
+                self.position.y = colliders[collision].bottom
                 self.speed.y = 0
 
         # coins
+        coin_rects = []
+        for coin in self.coins:
+            coin_rects.append(coin.rect)
+
         body_collider = pygame.Rect(math.ceil(self.position.x),
                                     math.ceil(self.position.y),
                                     math.ceil(self.size.x),
                                     math.ceil(self.size.y))
 
-        collision = body_collider.collidelist(self.coin_rects)
+        collision = body_collider.collidelist(coin_rects)
         if collision != -1:
             self.coin_collected = True
-            del self.coin_rects[collision]
+            del coin_rects[collision]
 
             collided_coin = self.coins[collision]
             collided_coin.collect(sound_on)
@@ -121,7 +124,11 @@ class Player(pygame.sprite.Sprite, miscClasses.GameObject):
             self.coin_collected = False
 
         # death
-        collision = body_collider.collidelist(self.obstacles)
+        spike_rects = []
+        for spike in self.spikes:
+            spike_rects.append(spike.rect)
+
+        collision = body_collider.collidelist(spike_rects)
         if collision != -1 or self.position.y > 1130:
             self.dead = True
 
@@ -136,7 +143,6 @@ class Player(pygame.sprite.Sprite, miscClasses.GameObject):
         self.pre_anim = self.anim
 
     def draw(self, screen, scroll, scale):
-
         # animations
         def running():
             self.image = MarkAnimation[math.floor((self.anim_time % 0.64) / 0.08)]

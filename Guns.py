@@ -10,10 +10,10 @@ class GunAnimationCollection:
 
 
 class Gun(miscClasses.GameObject):
-    def __init__(self, player_position, size, animations, cool_down, socket_offset, colliders):
+    def __init__(self, player_position, size, animations, cool_down, socket_offset, platforms):
         self.animations = animations
         self.socket_offset = pygame.Vector2(socket_offset)
-        self.colliders = colliders
+        self.platforms = platforms
         miscClasses.GameObject.__init__(self, player_position + self.socket_offset, size, animations.running[0])
 
         self.shooting = False
@@ -25,13 +25,20 @@ class Gun(miscClasses.GameObject):
         self.anim_time = 0
         self.anim_duration = 0.05 * len(self.animations.shooting)
 
+    def generate_colliders(self):
+        colliders = []
+        for platform in self.platforms:
+            colliders.append(platform.rect)
+        return colliders
+
     def shoot(self, projectile_list, sound_on):
+        colliders = self.generate_colliders()
         projectileClass.Projectile(position=self.position + pygame.Vector2(159, 10),
                                    direction=0,
                                    speed=3500,
                                    range=1000,
                                    projectiles=projectile_list,
-                                   colliders=self.colliders)
+                                   colliders=colliders)
 
     def update(self, player_position, player_animation, player_anim_time, shoot_pressed, projectile_list, sound_on, delta_time):
         self.position = player_position + self.socket_offset
@@ -95,19 +102,18 @@ shotgun_shot_sfx = pygame.mixer.Sound(os.path.join('Assets', 'Sounds', 'Guns', '
 
 
 class Shotgun(Gun):
-    def __init__(self, player_position, channel, colliders):
+    def __init__(self, player_position, colliders):
         Gun.__init__(self, player_position, (159, 44), shotgun_animations, 0.5, (-12, 32), colliders)
-        self.channel = channel
 
     def shoot(self, projectile_list, sound_on):
         if sound_on:
             shotgun_shot_sfx.play()
 
+        colliders = self.generate_colliders()
         for _ in range(7):
             projectileClass.Projectile(position=self.position + pygame.Vector2(159, 10),
                                        direction=random.randint(-20, 20),
                                        speed=random.randint(3000, 4000),
                                        range=random.randint(1000, 1100),
-                                       channel=self.channel,
                                        projectiles=projectile_list,
-                                       colliders=self.colliders)
+                                       colliders=colliders)

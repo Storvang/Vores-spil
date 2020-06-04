@@ -12,11 +12,10 @@ for i in range(5):
 
 
 class Projectile(GameObject):
-    def __init__(self, position, direction, speed, range, channel, projectiles, colliders):
+    def __init__(self, position, direction, speed, range, projectiles, colliders):
         self.speed = speed
         GameObject.__init__(self, position, (40, 20), projectile_img, direction)
 
-        self.channel = channel
         self.projectiles = projectiles
         self.projectiles.append(self)
 
@@ -141,7 +140,6 @@ class Projectile(GameObject):
                 self.direction = hit_side * -90
                 self.speed = 0
                 self.anim = 'hit'
-                # self.channel.play(collision_sound)
 
         # anim time
         if self.anim != self.pre_anim:
