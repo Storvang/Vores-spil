@@ -57,33 +57,49 @@ GameInstance = GameInstanceClass.GameInstance()
 while not quit_game:
 
     # input
-    space_pressed = False
-    mouse_pressed = False
+    jump_pressed = False
+    shoot_pressed = False
 
     for event in pygame.event.get():
-        mouse_pressed = event.type == pygame.MOUSEBUTTONDOWN
+        shoot_pressed = event.type == pygame.MOUSEBUTTONDOWN
 
         if event.type == pygame.QUIT:
             quit_game = True
 
         elif event.type == pygame.KEYDOWN:
 
-            # jump
-            if event.key == pygame.K_SPACE:
-                space_pressed = True
+            def jump():
+                global jump_pressed
+                jump_pressed = True
 
-            # pause
-            elif event.key == pygame.K_ESCAPE and GUI.transition is None:
-                if isinstance(GUI.scene, GUIScenes.PauseMenu):
-                    GUI.scene = GUIScenes.Game(GUI.coin_count)
-                elif isinstance(GUI.scene, GUIScenes.Game):
-                    GUI.scene = GUIScenes.PauseMenu(GUI.sound_on, GUI.music_on)
+            def shoot():
+                global shoot_pressed
+                shoot_pressed = True
 
-            # toggle fullscreen
-            elif event.key == pygame.K_TAB:
+            def pause():
+                global GUI
+
+                if GUI.transition is None:
+                    if isinstance(GUI.scene, GUIScenes.PauseMenu):
+                        GUI.scene = GUIScenes.Game(GUI.coin_count)
+                    elif isinstance(GUI.scene, GUIScenes.Game):
+                        GUI.scene = GUIScenes.PauseMenu(GUI.sound_on, GUI.music_on)
+
+            def toggle_fullscreen():
+                global fullscreen, screen, screen_scale
+
                 fullscreen = not fullscreen
                 GUI.fullscreen = fullscreen
                 screen, screen_scale = make_screen(fullscreen, window_scale, monitor_dim)
+
+            action = {pygame.K_SPACE: jump,
+                      pygame.K_w: jump,
+                      pygame.K_i: shoot,
+                      pygame.K_ESCAPE: pause,
+                      pygame.K_TAB: toggle_fullscreen}[event.key]
+
+            action()
+
 
     mouse_pos = pygame.Vector2(pygame.mouse.get_pos()) / screen_scale
     mouse_down = pygame.mouse.get_pressed()[0]
@@ -111,7 +127,7 @@ while not quit_game:
         sound_on = GUI.sound_on
 
     if isinstance(GUI.scene, GUIScenes.Game):   # Tjek at man ikke er på en menu
-        coin_collected, dead = GameInstance.update(delta_time, space_pressed, mouse_pressed, sound_on)
+        coin_collected, dead = GameInstance.update(delta_time, jump_pressed, shoot_pressed, sound_on)
         if coin_collected:
             coin_count += 1
         if dead:
