@@ -35,6 +35,7 @@ music_off_button_imgs = []
 load_button_imgs(music_off_button_imgs, 'Music button off', os.path.join('Assets', 'UI', 'Music button on and off'))
 
 coin_img = pygame.image.load(os.path.join('Assets', 'Dogecoin.png'))
+main_title_img = pygame.image.load(os.path.join('Assets', 'UI', 'Hi Mark Title.png'))
 pause_title_img = pygame.image.load(os.path.join('Assets', 'UI', 'Paused Title.png'))
 death_title_img = pygame.image.load(os.path.join('Assets', 'UI', 'Death Title.png'))
 
@@ -74,8 +75,9 @@ class StartMenu(GUIScene):
 
         GUIScene.__init__(self)
 
-        self.play_button = GUIElementClasses.Button((773, 478), (250, 125), play_button_imgs, self.GUIElements)
-        self.fullscreen_button = GUIElementClasses.Button((1050, 478), (113, 125), flscrn_button_imgs, self.GUIElements)
+        self.title = GUIElementClasses.Image((450, 200), (1020, 260), main_title_img, self.GUIElements)
+        self.play_button = GUIElementClasses.Button((835, 541), (250, 125), play_button_imgs, self.GUIElements)
+        self.fullscreen_button = GUIElementClasses.Button((1757, 50), (113, 125), flscrn_button_imgs, self.GUIElements)
         self.sound_button = GUIElementClasses.Button((1757, 905), (113, 125), sound_button_imgs, self.GUIElements)
         self.music_button = GUIElementClasses.Button((1594, 905), (113, 125), music_button_imgs, self.GUIElements)
 
@@ -116,16 +118,9 @@ class PauseMenu(GUIScene):
         self.resume_button = GUIElementClasses.Button((835, 541), (250, 125), play_button_imgs, self.GUIElements)
         self.replay_button = GUIElementClasses.Button((650, 541), (113, 125), replay_button_imgs, self.GUIElements)
         self.home_button = GUIElementClasses.Button((1157, 541), (113, 125), home_button_imgs, self.GUIElements)
+        self.fullscreen_button = GUIElementClasses.Button((1757, 50), (113, 125), flscrn_button_imgs, self.GUIElements)
         self.sound_button = GUIElementClasses.Button((1757, 905), (113, 125), sound_button_imgs, self.GUIElements)
         self.music_button = GUIElementClasses.Button((1594, 905), (113, 125), music_button_imgs, self.GUIElements)
-
-
-
-
-
-
-
-
 
     def update(self, mouse_pos, mouse_down, delta_time):
 
@@ -153,9 +148,14 @@ class DeathMenu(GUIScene):
     def __init__(self):
         GUIScene.__init__(self)
 
+        # den mørke baggrund
+        black_img = pygame.Surface((1, 1))
+        pygame.draw.rect(black_img, (0, 0, 0), (0, 0, 1, 1))
+        self.fade_background = GUIElementClasses.Image((0, 0), (1920, 1080), black_img, self.GUIElements, 100)
+
         self.death_title = GUIElementClasses.Image((540, 243), (840, 180), death_title_img, self.GUIElements)
-        self.replay_button = GUIElementClasses.Button((835, 541), (250, 125), wide_replay_button_imgs, self.GUIElements)
-        self.home_button = GUIElementClasses.Button((1157, 541), (113, 125), home_button_imgs, self.GUIElements)
+        self.replay_button = GUIElementClasses.Button((743, 541), (250, 125), wide_replay_button_imgs, self.GUIElements)
+        self.home_button = GUIElementClasses.Button((1065, 541), (113, 125), home_button_imgs, self.GUIElements)
 
     def update(self, mouse_pos, mouse_down, delta_time):
 

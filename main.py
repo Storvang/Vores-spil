@@ -6,7 +6,7 @@ pygame.init()
 pygame.mixer.init()
 
 # Mixeren bliver nødt til at blive inittet før der kan indlæses lydfiler
-import GUIClass, GUIScenes, GameInstanceClass, stageGeneration
+import GUIClass, GUIScenes, GameInstanceClass
 
 def make_screen(fullscreen, window_scale, monitor_dim):
     if fullscreen:
@@ -92,14 +92,15 @@ while not quit_game:
                 GUI.fullscreen = fullscreen
                 screen, screen_scale = make_screen(fullscreen, window_scale, monitor_dim)
 
-            action = {pygame.K_SPACE: jump,
-                      pygame.K_w: jump,
-                      pygame.K_i: shoot,
-                      pygame.K_ESCAPE: pause,
-                      pygame.K_TAB: toggle_fullscreen}[event.key]
+            action_dict = {pygame.K_SPACE: jump,
+                           pygame.K_w: jump,
+                           pygame.K_i: shoot,
+                           pygame.K_ESCAPE: pause,
+                           pygame.K_f: toggle_fullscreen}
 
-            action()
-
+            if event.key in action_dict:
+                action = action_dict[event.key]
+                action()
 
     mouse_pos = pygame.Vector2(pygame.mouse.get_pos()) / screen_scale
     mouse_down = pygame.mouse.get_pressed()[0]

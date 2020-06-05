@@ -77,6 +77,12 @@ class GUI:
                 self.transition_offset.y = -540 * ((self.transition_time / 0.5) ** 2 - (self.transition_time / 0.5))
             else:
                 self.scene = GUIScenes.Game(self.coin_count)
+                self.transition = 'enter_game'
+
+        def enter_game():
+            if self.transition_time <= 0.5:
+                self.transition_offset.y = -100 * ((self.transition_time / 0.5) - 1) ** 2
+            else:
                 self.transition = None
 
         def restart_game():
@@ -118,6 +124,7 @@ class GUI:
         # animate
         if self.transition is not None:
             transition_function = {'start_game': start_game,
+                                   'enter_game': enter_game,
                                    'restart_game': restart_game,
                                    'go_home': go_home,
                                    'die': die}[self.transition]
