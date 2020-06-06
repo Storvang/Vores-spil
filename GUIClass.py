@@ -8,12 +8,7 @@ class GUI:
     def __init__(self):
         self.coin_count = [0]
 
-        self.sound_on = True
-        self.music_on = True
-        self.fullscreen = False
-        self.game_reset = False
-
-        self.scene = self.start_menu = GUIScenes.StartMenu(self.sound_on, self.music_on)
+        self.scene = self.start_menu = GUIScenes.StartMenu(True, True)
         self.pre_scene = None
 
         self.transition = None
@@ -27,8 +22,9 @@ class GUI:
         self.fade_foreground = GUIElementClasses.Image((0, 0), (1920, 1080), black_img, [], 0)
         self.fade_foreground.show = False
 
-    def update(self, mouse_pos, mouse_down, coin_count, delta_time):
+    def update(self, mouse_pos, mouse_down, coin_count, sound_on, music_on, delta_time):
         self.coin_count[0] = coin_count
+        return_value = None
 
         # funktioner som bliver kaldt af knapperne
         def play():
@@ -44,13 +40,16 @@ class GUI:
             self.transition = 'go_home'
 
         def switch_sound():
-            self.sound_on = not self.sound_on
+            nonlocal return_value
+            return_value = 'switch_sound'
 
         def switch_music():
-            self.music_on = not self.music_on
+            nonlocal return_value
+            return_value = 'switch_music'
 
         def switch_fullscreen():
-            self.fullscreen = not self.fullscreen
+            nonlocal return_value
+            return_value = 'switch_fullscreen'
 
         if self.transition is None:
             update_return = self.scene.update(mouse_pos, mouse_down, delta_time)
@@ -88,12 +87,13 @@ class GUI:
                 self.transition = None
 
         def restart_game():
+            global return_value
             self.fade_foreground.show = True
 
             if self.transition_stage == 0 and self.transition_time <= 0.5:
                 self.fade_foreground.alpha = 510 * self.transition_time
             elif self.transition_stage == 0:
-                self.game_reset = True
+                return_value = 'restart_game'
                 self.transition_stage = 1
                 self.scene = GUIScenes.Game(self.coin_count)
 
@@ -109,9 +109,10 @@ class GUI:
             if self.transition_stage == 0 and self.transition_time <= 0.5:
                 self.fade_foreground.alpha = 510 * self.transition_time
             elif self.transition_stage == 0:
-                self.game_reset = True
+                global return_value
+                return_value = 'restart_game'
                 self.transition_stage = 1
-                self.scene = GUIScenes.StartMenu(self.sound_on, self.music_on)
+                self.scene = GUIScenes.StartMenu(sound_on, music_on)
 
             elif self.transition_stage == 1 and self.transition_time <= 1:
                 self.fade_foreground.alpha = -510 * (self.transition_time - 0.5) + 255
@@ -133,6 +134,8 @@ class GUI:
             transition_function()
         else:
             self.transition_offset = pygame.Vector2(0, 0)
+
+        return return_value
 
     def draw(self, screen, scale):
         self.scene.draw(screen, scale, self.transition_offset)
