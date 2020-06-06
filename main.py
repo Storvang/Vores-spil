@@ -1,4 +1,9 @@
-import pygame, time, os, ctypes, platform
+import pygame
+import ctypes
+import platform
+import os
+import time
+from performance_logging import performanceLogger
 
 # init pygame and mixer
 pygame.mixer.pre_init(22050, -16, 2, 512)
@@ -6,7 +11,10 @@ pygame.init()
 pygame.mixer.init()
 
 # Mixeren bliver nødt til at blive inittet før der kan indlæses lydfiler
-import GUIClass, GUIScenes, GameInstanceClass
+import GUIClass
+import GUIScenes
+import GameInstanceClass
+
 
 def make_screen(fullscreen, window_scale, monitor_dim):
     if fullscreen:
@@ -39,7 +47,7 @@ icon_img = pygame.image.load(os.path.join('Assets', 'icon.png'))
 pygame.display.set_icon(icon_img)
 pygame.display.set_caption('Vores spil der bare sparker røv')
 
-min_delta_time = 0.017
+min_delta_time = 0.003
 max_delta_time = 0.066
 delta_time = 0
 pre_time = pygame.time.get_ticks() / 1000
@@ -113,6 +121,7 @@ while not quit_game:
         GUI.game_reset = False
 
     # update
+    update_start = pygame.time.get_ticks()
     if GUI.fullscreen != fullscreen:
         fullscreen = GUI.fullscreen
         screen, screen_scale = make_screen(fullscreen, window_scale, monitor_dim)
@@ -134,7 +143,11 @@ while not quit_game:
         if dead:
             GUI.scene = GUIScenes.DeathMenu()
 
+    update_time = (pygame.time.get_ticks() - update_start) / 1000
+
     # draw
+    draw_start = pygame.time.get_ticks()
+
     GameInstance.draw(screen, screen_scale)
     GUI.draw(screen, screen_scale)
 
@@ -143,6 +156,8 @@ while not quit_game:
         screen.blit(FPS_low_img, (round(1723 * screen_scale), round(5 * screen_scale)))
 
     pygame.display.flip()
+
+    draw_time = (pygame.time.get_ticks() - draw_start) / 1000
 
     # delta time
     FPS_low = False
@@ -160,6 +175,11 @@ while not quit_game:
 
     # delta_time = delta_time * 0.25
 
-    # with open('performance log.txt', 'a') as performance_log:
-    #     performance_log.write('\n' + str(delta_time))
+    # performance logging
+    performanceLogger.frame_times.append(delta_time)
+    performanceLogger.update_times.append(update_time)
+    performanceLogger.render_times.append(draw_time)
+
+performanceLogger.write_to_file()
+
 # oh yeah yeah

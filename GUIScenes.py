@@ -133,6 +133,9 @@ class PauseMenu(GUIScene):
         elif self.home_button.update(mouse_pos, mouse_down, delta_time):
             return 'go_home'
 
+        elif self.fullscreen_button.update(mouse_pos, mouse_down, delta_time):
+            return 'switch_fullscreen'
+
         elif self.sound_button.update(mouse_pos, mouse_down, delta_time):
             self.sound_on = not self.sound_on
             self.sound_button.images = sound_on_button_imgs if self.sound_on else sound_off_button_imgs
