@@ -1,5 +1,9 @@
-import pygame, math, os, glob
-import miscClasses, Guns
+import pygame
+import math
+import os
+
+import miscClasses
+import Guns
 
 jump_sound = pygame.mixer.Sound(os.path.join('Assets', 'Sounds', 'jump2.wav'))
 

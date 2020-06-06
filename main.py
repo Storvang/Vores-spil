@@ -1,4 +1,8 @@
-import pygame, time, os, ctypes, platform
+import pygame
+import time
+import os
+import ctypes
+import platform
 
 # init pygame and mixer
 pygame.mixer.pre_init(22050, -16, 2, 512)
@@ -6,7 +10,10 @@ pygame.init()
 pygame.mixer.init()
 
 # Mixeren bliver nødt til at blive inittet før der kan indlæses lydfiler
-import GUIClass, GUIScenes, GameInstanceClass
+import GUIClass
+import GUIScenes
+import GameInstanceClass
+
 
 def make_screen(fullscreen, window_scale, monitor_dim):
     if fullscreen:
@@ -157,9 +164,4 @@ while not quit_game:
     elif delta_time > max_delta_time:
         delta_time = max_delta_time
         FPS_low = True
-
-    # delta_time = delta_time * 0.25
-
-    # with open('performance log.txt', 'a') as performance_log:
-    #     performance_log.write('\n' + str(delta_time))
 # oh yeah yeah

@@ -1,5 +1,10 @@
-import pygame, os, math, random
-import miscClasses, projectileClass
+import pygame
+import os
+import math
+import random
+
+import miscClasses
+import projectileClass
 
 
 # findes kun for at have en navngivet liste af animationer

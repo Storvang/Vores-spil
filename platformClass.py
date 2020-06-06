@@ -1,4 +1,6 @@
-import pygame, os
+import pygame
+import os
+
 import miscClasses
 
 platform_left_img = pygame.image.load(os.path.join("Assets", "Platforms", "Platform(Left end).png"))

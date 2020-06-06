@@ -3,14 +3,6 @@ from playerClass import Player
 import background
 import stageGeneration
 
-# with open('stage performance log.txt', 'w') as file:
-#     file.write("stage generation time:")
-#
-# with open('player performance log.txt', 'w') as file:
-#     file.write("player generation time:")
-#
-# with
-
 
 class GameInstance:
 

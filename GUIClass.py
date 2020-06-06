@@ -1,5 +1,7 @@
 import pygame
-import GUIElementClasses, GUIScenes
+
+import GUIElementClasses
+import GUIScenes
 
 
 class GUI:

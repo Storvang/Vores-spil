@@ -1,4 +1,6 @@
-import os, json, random
+import os
+import json
+import random
 from collections import deque
 
 import miscClasses

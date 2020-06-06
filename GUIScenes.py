@@ -1,4 +1,5 @@
-import pygame, os
+import pygame
+import os
 import GUIElementClasses
 
 

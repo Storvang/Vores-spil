@@ -1,4 +1,7 @@
-import pygame, os, math
+import pygame
+import os
+import math
+
 from miscClasses import GameObject
 
 projectile_img = pygame.image.load(os.path.join('Assets', 'Guns', 'Projectile', 'Projectile.png'))
