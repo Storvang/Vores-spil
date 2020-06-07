@@ -97,12 +97,12 @@ class Player(pygame.sprite.Sprite, miscClasses.GameObject):
 
             # Tjek om den har stødt hovedet mod noget
             head_collider = pygame.Rect(math.ceil(self.position.x),
-                                        math.ceil(pre_y),
+                                        math.ceil(self.position.y),
                                         math.ceil(self.size.y),
                                         math.ceil(self.position.y - pre_y))
 
             collision = head_collider.collidelist(colliders)   # Collision er -1 hvis der ikke er nogen kollisioner
-            was_under = pre_y >= colliders[collision].top
+            was_under = math.ceil(pre_y) >= colliders[collision].bottom
             if collision != -1 and was_under:
                 self.position.y = colliders[collision].bottom
                 self.speed.y = 0
