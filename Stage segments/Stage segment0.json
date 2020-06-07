@@ -1,0 +1,15 @@
+{
+	"length": 1900,
+	
+	"platforms": [
+		{
+			"x": -50,
+			"y": 880,
+			"length": 38
+		}
+	],
+	
+	"spikes": [],
+	
+	"coins": []
+}

@@ -1,14 +1,15 @@
 import os
 import json
 import random
+import pathlib
 from collections import deque
 
 import miscClasses
 from platformClass import Platform
 
 segment_dicts = []
-for i in range(2):
-    with open(os.path.join('Stage segments', 'Stage segment' + str(i) + '.txt'), 'r') as segment_file:
+for file in pathlib.Path('Stage segments').iterdir():
+    with open(file, 'r') as segment_file:
         segment_dicts.append(json.load(segment_file))
 
 
@@ -62,8 +63,6 @@ class Stage:
         self.spikes = deque()
         self.coins = deque()
 
-        self.segment_amount = 1
-
         self.segments = deque([StageSegment(0, 0, self.platforms, self.spikes, self.coins)])
 
     def update(self, scroll):
@@ -73,6 +72,6 @@ class Stage:
 
         # add new segment
         if self.segments[-1].position + self.segments[-1].length < scroll + 1920:
-            segment_id = random.randint(1, self.segment_amount)
+            segment_id = random.randint(1, len(segment_dicts) - 1)
             start_point = self.segments[-1].position + self.segments[-1].length + 300
             self.segments.append(StageSegment(segment_id, start_point, self.platforms, self.spikes, self.coins))

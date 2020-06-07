@@ -1,4 +1,0 @@
-{
-    "highscore": 0,
-    "coin_count": 0
-}

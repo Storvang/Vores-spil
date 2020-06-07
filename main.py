@@ -58,7 +58,7 @@ GUI = GUIClass.GUI()
 GameInstance = GameInstanceClass.GameInstance()
 
 # load saved data
-with open('saveData.txt', 'r') as saveDataFile:
+with open('saveData.json', 'r') as saveDataFile:
     saveData = json.load(saveDataFile)
 
     score = 0
@@ -95,7 +95,7 @@ while not quit_game:
 
                 if GUI.transition is None:
                     if isinstance(GUI.scene, GUIScenes.PauseMenu):
-                        GUI.scene = GUIScenes.Game()
+                        GUI.scene = GUIScenes.Game(coin_count, highscore)
                     elif isinstance(GUI.scene, GUIScenes.Game):
                         GUI.scene = GUIScenes.PauseMenu(sound_on, music_on)
 
@@ -181,7 +181,7 @@ while not quit_game:
         FPS_low = True
 
 # save data
-with open('saveData.txt', 'w') as saveDataFile:
+with open('saveData.json', 'w') as saveDataFile:
     saveData = {'highscore': highscore, 'coin_count': coin_count}
     json.dump(saveData, saveDataFile, indent=4)
 
