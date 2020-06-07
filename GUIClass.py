@@ -6,8 +6,6 @@ import GUIScenes
 
 class GUI:
     def __init__(self):
-        self.coin_count = [0]
-
         self.scene = self.start_menu = GUIScenes.StartMenu(True, True)
         self.pre_scene = None
 
@@ -22,8 +20,7 @@ class GUI:
         self.fade_foreground = GUIElementClasses.Image((0, 0), (1920, 1080), black_img, [], 0)
         self.fade_foreground.show = False
 
-    def update(self, mouse_pos, mouse_down, coin_count, sound_on, music_on, delta_time):
-        self.coin_count[0] = coin_count
+    def update(self, mouse_pos, mouse_down, coin_count, score, highscore, sound_on, music_on, delta_time):
         return_value = None
 
         # funktioner som bliver kaldt af knapperne
@@ -34,7 +31,7 @@ class GUI:
             self.transition = 'restart_game'
 
         def resume():
-            self.scene = GUIScenes.Game(self.coin_count)
+            self.scene = GUIScenes.Game(coin_count, highscore)
 
         def go_home():
             self.transition = 'go_home'
@@ -52,7 +49,7 @@ class GUI:
             return_value = 'switch_fullscreen'
 
         if self.transition is None:
-            update_return = self.scene.update(mouse_pos, mouse_down, delta_time)
+            update_return = self.scene.update(coin_count, score, mouse_pos, mouse_down, delta_time)
 
             if update_return is not None:
                 function = {'play': play,
@@ -77,7 +74,7 @@ class GUI:
             if self.transition_time <= 1:
                 self.transition_offset.y = -540 * ((self.transition_time / 0.5) ** 2 - (self.transition_time / 0.5))
             else:
-                self.scene = GUIScenes.Game(self.coin_count)
+                self.scene = GUIScenes.Game(coin_count, highscore)
                 self.transition = 'enter_game'
 
         def enter_game():
@@ -87,7 +84,7 @@ class GUI:
                 self.transition = None
 
         def restart_game():
-            global return_value
+            nonlocal return_value
             self.fade_foreground.show = True
 
             if self.transition_stage == 0 and self.transition_time <= 0.5:
@@ -95,7 +92,7 @@ class GUI:
             elif self.transition_stage == 0:
                 return_value = 'restart_game'
                 self.transition_stage = 1
-                self.scene = GUIScenes.Game(self.coin_count)
+                self.scene = GUIScenes.Game(coin_count, highscore)
 
             elif self.transition_stage == 1 and self.transition_time <= 1:
                 self.fade_foreground.alpha = -510 * (self.transition_time - 0.5) + 255
@@ -109,7 +106,7 @@ class GUI:
             if self.transition_stage == 0 and self.transition_time <= 0.5:
                 self.fade_foreground.alpha = 510 * self.transition_time
             elif self.transition_stage == 0:
-                global return_value
+                nonlocal return_value
                 return_value = 'restart_game'
                 self.transition_stage = 1
                 self.scene = GUIScenes.StartMenu(sound_on, music_on)

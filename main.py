@@ -4,6 +4,7 @@ import os
 import ctypes
 import platform
 import math
+import json
 
 # init pygame and mixer
 pygame.mixer.pre_init(22050, -16, 2, 512)
@@ -46,7 +47,6 @@ pygame.mixer.music.load(os.path.join('Assets', 'Sounds', 'en for alle.mp3'))
 pygame.mixer.music.play(-1)
 
 # init timing
-# min_delta_time = 1/60   # den højest tilladte framerate svarer til 60 fps
 max_delta_time = 1/15   # den lavest tilladte framerate svarer til 15 fps
 delta_time = 0
 pre_time = pygame.time.get_ticks() / 1000
@@ -57,12 +57,17 @@ FPS_low = False
 GUI = GUIClass.GUI()
 GameInstance = GameInstanceClass.GameInstance()
 
-# init rest
-coin_count = 0
-quit_game = False
+# load saved data
+with open('saveData.txt', 'r') as saveDataFile:
+    saveData = json.load(saveDataFile)
+
+    score = 0
+    highscore = saveData['highscore']
+    coin_count = saveData['coin_count']
 
 
 # main loop
+quit_game = False
 while not quit_game:
 
     # collect input
@@ -90,7 +95,7 @@ while not quit_game:
 
                 if GUI.transition is None:
                     if isinstance(GUI.scene, GUIScenes.PauseMenu):
-                        GUI.scene = GUIScenes.Game(GUI.coin_count)
+                        GUI.scene = GUIScenes.Game()
                     elif isinstance(GUI.scene, GUIScenes.Game):
                         GUI.scene = GUIScenes.PauseMenu(sound_on, music_on)
 
@@ -114,9 +119,9 @@ while not quit_game:
     mouse_down = pygame.mouse.get_pressed()[0]
 
     # update GUI
-    GUI_action = GUI.update(mouse_pos, mouse_down, coin_count, sound_on, music_on, delta_time)
+    GUI_action = GUI.update(mouse_pos, mouse_down, coin_count, score, highscore, sound_on, music_on, delta_time)
 
-    def game_reset():
+    def restart_game():
         global GameInstance
         GameInstance = GameInstanceClass.GameInstance()
 
@@ -140,7 +145,7 @@ while not quit_game:
 
 
     if GUI_action is not None:
-        GUI_action_function = {'game_reset': game_reset,
+        GUI_action_function = {'restart_game': restart_game,
                                'switch_fullscreen': switch_fullscreen,
                                'switch_music': switch_music,
                                'switch_sound': switch_sound}[GUI_action]
@@ -148,11 +153,13 @@ while not quit_game:
 
     # update game
     if isinstance(GUI.scene, GUIScenes.Game):   # Tjek at man ikke er på en menu
-        coin_collected, dead = GameInstance.update(delta_time, jump_pressed, shoot_pressed, sound_on)
+        coin_collected, dead, score = GameInstance.update(delta_time, jump_pressed, shoot_pressed, sound_on)
         if coin_collected:
             coin_count += 1
         if dead:
             GUI.scene = GUIScenes.DeathMenu()
+        if score > highscore:
+            highscore = score
 
     # draw
     GameInstance.draw(screen, screen_scale)
@@ -169,12 +176,13 @@ while not quit_game:
     delta_time = (pygame.time.get_ticks() / 1000) - pre_time
     pre_time = pygame.time.get_ticks() / 1000
 
-    # if delta_time < min_delta_time:
-    #     time.sleep(min_delta_time - delta_time)
-    #     delta_time += (pygame.time.get_ticks() / 1000) - pre_time
-    #     pre_time = pygame.time.get_ticks() / 1000
-
     if delta_time > max_delta_time:
         delta_time = max_delta_time
         FPS_low = True
+
+# save data
+with open('saveData.txt', 'w') as saveDataFile:
+    saveData = {'highscore': highscore, 'coin_count': coin_count}
+    json.dump(saveData, saveDataFile, indent=4)
+
 # oh yeah yeah

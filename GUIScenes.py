@@ -47,7 +47,7 @@ class GUIScene:
     def __init__(self):
         self.GUIElements = []
 
-    def update(self, mouse_pos, mouse_down, delta_time):
+    def update(self, coin_count, score, mouse_pos, mouse_down, delta_time):
         pass
 
     def draw(self, screen, scale, offset):
@@ -56,14 +56,33 @@ class GUIScene:
 
 
 class Game(GUIScene):
-    def __init__(self, coin_count):
-        self.coin_count = coin_count
+    def __init__(self, coin_count, highscore):
         GUIScene.__init__(self)
-        self.coin_logo = GUIElementClasses.Image((25, 25), (50, 50), coin_img, self.GUIElements)
-        self.coin_counter = GUIElementClasses.Text((90, -4), str(self.coin_count[0]), pixel_font, (217, 182, 11), self.GUIElements)
+        self.highscore = highscore
 
-    def update(self, mouse_pos, mouse_down, delta_time):
-        self.coin_counter.set_text(str(self.coin_count[0]))
+        self.coin_logo = GUIElementClasses.Image((25, 25), (50, 50), coin_img, self.GUIElements)
+
+        self.coin_counter = GUIElementClasses.Text((90, -4), str(coin_count), pixel_font,
+                                                   (217, 182, 11), self.GUIElements)
+
+        self.score_number = GUIElementClasses.Text((960, -4), '0', pixel_font,
+                                                   (255, 255, 255), self.GUIElements)
+
+        self.highscore_title = GUIElementClasses.Text((1587, -4), 'HIGHSCORE:', pixel_font,
+                                                      (255, 255, 255), self.GUIElements, alpha=200)
+
+        self.highscore_number = GUIElementClasses.Text((0, 70), str(highscore), pixel_font,
+                                                       (255, 255, 255), self.GUIElements, alpha=200)
+        self.highscore_number.position.x = 1920 - self.highscore_number.size.x - 25
+
+    def update(self, coin_count, score, mouse_pos, mouse_down, delta_time):
+        self.coin_counter.set_text(str(coin_count))
+        self.score_number.set_text(str(score))
+        self.score_number.position.x = (1920 - self.score_number.size.x) / 2
+
+        if score > self.highscore:
+            self.highscore_title.alpha = 255
+            self.highscore_number.alpha = 255
 
 
 class StartMenu(GUIScene):
@@ -82,7 +101,7 @@ class StartMenu(GUIScene):
         self.sound_button = GUIElementClasses.Button((1757, 905), (113, 125), sound_button_imgs, self.GUIElements)
         self.music_button = GUIElementClasses.Button((1594, 905), (113, 125), music_button_imgs, self.GUIElements)
 
-    def update(self, mouse_pos, mouse_down, delta_time):
+    def update(self, coin_count, score, mouse_pos, mouse_down, delta_time):
 
         if self.play_button.update(mouse_pos, mouse_down, delta_time):
             return 'play'
@@ -123,7 +142,7 @@ class PauseMenu(GUIScene):
         self.sound_button = GUIElementClasses.Button((1757, 905), (113, 125), sound_button_imgs, self.GUIElements)
         self.music_button = GUIElementClasses.Button((1594, 905), (113, 125), music_button_imgs, self.GUIElements)
 
-    def update(self, mouse_pos, mouse_down, delta_time):
+    def update(self, coin_count, score, mouse_pos, mouse_down, delta_time):
 
         if self.resume_button.update(mouse_pos, mouse_down, delta_time):
             return 'resume'
@@ -158,7 +177,7 @@ class DeathMenu(GUIScene):
         self.replay_button = GUIElementClasses.Button((743, 541), (250, 125), wide_replay_button_imgs, self.GUIElements)
         self.home_button = GUIElementClasses.Button((1065, 541), (113, 125), home_button_imgs, self.GUIElements)
 
-    def update(self, mouse_pos, mouse_down, delta_time):
+    def update(self, coin_count, score, mouse_pos, mouse_down, delta_time):
 
         if self.replay_button.update(mouse_pos, mouse_down, delta_time):
             return 'replay'

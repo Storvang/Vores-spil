@@ -7,6 +7,7 @@ import stageGeneration
 class GameInstance:
 
     def __init__(self):
+        self.score = 0
         self.scroll = 0
         self.cam_speed = 700
 
@@ -30,13 +31,14 @@ class GameInstance:
 
     def update(self, delta_time, jump_pressed, shoot_pressed, sound_on):
         self.scroll += self.cam_speed * delta_time
+        self.score = round(self.scroll / 200)
 
         self.stage.update(self.scroll)
 
         for projectile in self.projectiles:
             projectile.update(delta_time)
         self.Mark.update(delta_time, self.cam_speed, jump_pressed, shoot_pressed, sound_on)
-        return self.Mark.coin_collected, self.Mark.dead
+        return self.Mark.coin_collected, self.Mark.dead, self.score
 
     def draw(self, screen, screen_scale):
         screen.fill((74, 228, 255))
