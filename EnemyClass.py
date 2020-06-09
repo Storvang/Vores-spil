@@ -17,8 +17,6 @@ class Enemy(GameObject):
 
         self.projectiles = projectiles
 
-        self.dead = False
-
         size = (100, 100)
         GameObject.__init__(self, position, size, Enemy1_idle[0])
 
