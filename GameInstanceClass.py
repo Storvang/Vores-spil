@@ -22,7 +22,7 @@ class GameInstance:
            min_x = i * (1920/Cloud_amount)
            max_x = min_x+(1920/Cloud_amount-500)
            x = random.randrange(min_x, max_x)
-           y = random.randrange(-225, 100)
+           y = random.randrange(-200, 100)
            background.Cloud((x,y), self.clouds)
 
 
