@@ -21,3 +21,8 @@ class Cloud(miscClasses.GameObject):
             miscClasses.GameObject.__init__(self, position, size, Cloud3)
 
         self.clouds.append(self)
+    def update(self, scroll):
+        if self.position.x+self.size.x < scroll:
+            self.position.x=scroll + 1920
+
+
