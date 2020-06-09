@@ -1,5 +1,6 @@
 import pygame
 import os
+import math
 
 
 class GameObject:
@@ -34,7 +35,9 @@ class Spike(GameObject):
         self.spikes.append(self)
 
 
-coin_img = pygame.image.load(os.path.join('Assets', 'Dogecoin.png'))
+coin_animation = []
+for i in range(8):
+    coin_animation.append(pygame.image.load(os.path.join('Assets', 'Coin', 'coin_' + str(i) + '.png')))
 coin_sound = pygame.mixer.Sound(os.path.join('Assets', 'Sounds', 'coin.wav'))
 
 
@@ -43,10 +46,12 @@ class Coin(GameObject):
         size = (100, 100)
         self.coins = coins
         self.global_coins = global_coins
-        GameObject.__init__(self, position, size, coin_img)
+        GameObject.__init__(self, position, size, coin_animation[0])
 
         self.rect = pygame.Rect(round(self.position.x), round(self.position.y), round(self.size.x), round(self.size.y))
         self.coins.append(self)
+
+        self.anim_time = 0
 
     def collect(self, sound_on):
         if sound_on:
@@ -54,13 +59,9 @@ class Coin(GameObject):
         self.coins.remove(self)
         self.global_coins.remove(self)
 
-
-class Enemy:
-    def __init__(self, position):
-        pass
-
     def update(self, delta_time):
-        pass
+        self.anim_time += delta_time
 
     def draw(self, screen, scroll, scale):
-        pass
+        self.image = coin_animation[math.floor((self.anim_time % 0.64) / 0.08)]
+        GameObject.draw(self, screen, scroll, scale)

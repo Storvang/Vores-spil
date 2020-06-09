@@ -17,6 +17,7 @@ for i in range(5):
 class Projectile(GameObject):
     def __init__(self, position, direction, speed, range, projectiles, colliders):
         self.speed = speed
+        self.pre_position = pygame.Vector2(0, 0)
         GameObject.__init__(self, position, (40, 20), projectile_img, direction)
 
         self.projectiles = projectiles
@@ -113,13 +114,6 @@ class Projectile(GameObject):
 
         hit = vert_side or horiz_side
         return hit, hit_side, intersections[hit_side]
-
-        # side1 = self.collide_line(rect.topleft, rect.bottomleft)
-        # side2 = self.collide_line(rect.bottomleft, rect.bottomright)
-        # side3 = self.collide_line(rect.bottomright, rect.topright)
-        # side4 = self.collide_line(rect.topright, rect.topleft)
-        #
-        # return side1 or side2 or side3 or side4
 
     def update(self, delta_time):
 

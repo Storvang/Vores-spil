@@ -13,9 +13,10 @@ for i in range(8):
 
 
 class Player(pygame.sprite.Sprite, miscClasses.GameObject):
-    def __init__(self, position, speed, size, gun, platforms, spikes, coins, projectiles):
+    def __init__(self, position, speed, size, gun, platforms, spikes, coins, projectiles, enemies):
         self.speed = pygame.Vector2(speed)
         self.projectiles = projectiles
+        self.enemies = enemies
         self.platforms = platforms
         self.spikes = spikes
         self.coins = coins
@@ -128,11 +129,13 @@ class Player(pygame.sprite.Sprite, miscClasses.GameObject):
             self.coin_collected = False
 
         # death
-        spike_rects = []
+        dangerous_rects = []
         for spike in self.spikes:
-            spike_rects.append(spike.rect)
+            dangerous_rects.append(spike.rect)
+        for enemy in self.enemies:
+            dangerous_rects.append(enemy.rect)
 
-        collision = body_collider.collidelist(spike_rects)
+        collision = body_collider.collidelist(dangerous_rects)
         if collision != -1 or self.position.y > 1130:
             self.dead = True
 
