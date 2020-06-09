@@ -38,12 +38,12 @@ screen, screen_scale = make_screen(fullscreen, window_scale, monitor_dim)
 
 icon_img = pygame.image.load(os.path.join('Assets', 'icon.png'))
 pygame.display.set_icon(icon_img)
-pygame.display.set_caption('Vores spil der bare sparker røv')
+pygame.display.set_caption('Hi Mark')
 
 # init sound
 sound_on = True
 music_on = True
-pygame.mixer.music.load(os.path.join('Assets', 'Sounds', 'en for alle.mp3'))
+pygame.mixer.music.load(os.path.join('Assets', 'Sounds', 'music.mp3'))
 pygame.mixer.music.play(-1)
 
 # init timing
