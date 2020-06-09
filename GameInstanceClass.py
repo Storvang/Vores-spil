@@ -16,9 +16,16 @@ class GameInstance:
 
         self.stage = stageGeneration.Stage()
 
-        y = random.randint(-100, 100)
-        x = random.randint(0, 2500)
-        background.Cloud(position=(x, y), clouds=self.clouds)
+
+        Cloud_amount = 3
+        for i in range(Cloud_amount):
+           min_x = i * (1920/Cloud_amount)
+           max_x = min_x+(1920/Cloud_amount-500)
+           x = random.randrange(min_x, max_x)
+           y = random.randrange(-100, 100)
+           background.Cloud((x,y), self.clouds)
+
+
 
         self.Mark = Player(position=(300, -200),
                            speed=(self.cam_speed, 0),
@@ -32,6 +39,9 @@ class GameInstance:
     def update(self, delta_time, jump_pressed, shoot_pressed, sound_on):
         self.scroll += self.cam_speed * delta_time
         self.score = round(self.scroll / 200)
+
+        for Cloud in self.clouds:
+            Cloud.update(self.scroll)
 
         self.stage.update(self.scroll)
 
