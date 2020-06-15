@@ -35,7 +35,7 @@ load_button_imgs(music_on_button_imgs, 'Music button on', os.path.join('Assets',
 music_off_button_imgs = []
 load_button_imgs(music_off_button_imgs, 'Music button off', os.path.join('Assets', 'UI', 'Music button on and off'))
 
-coin_img = pygame.image.load(os.path.join('Assets', 'Dogecoin.png'))
+coin_img = pygame.image.load(os.path.join('Assets', 'Coin', 'coin_0.png'))
 main_title_img = pygame.image.load(os.path.join('Assets', 'UI', 'Hi Mark Title.png'))
 pause_title_img = pygame.image.load(os.path.join('Assets', 'UI', 'Paused Title.png'))
 death_title_img = pygame.image.load(os.path.join('Assets', 'UI', 'Death Title.png'))
@@ -60,7 +60,7 @@ class Game(GUIScene):
         GUIScene.__init__(self)
         self.highscore = highscore
 
-        self.coin_logo = GUIElementClasses.Image((25, 25), (50, 50), coin_img, self.GUIElements)
+        self.coin_logo = GUIElementClasses.Image((25, 25), (44, 50), coin_img, self.GUIElements)
 
         self.coin_counter = GUIElementClasses.Text((90, -4), str(coin_count), pixel_font,
                                                    (217, 182, 11), self.GUIElements)
